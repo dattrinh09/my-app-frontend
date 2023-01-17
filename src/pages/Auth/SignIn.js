@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { ConstanthPaths } from '../../constanth/constanth.path'
 import axiosInstance from '../../requests/axiosInstance'
-import styles from './Form.module.css'
+import { FormContainer, FormHeading } from './form-styles'
 
 const SignIn = () => {
   const [error, setError] = useState("")
@@ -29,8 +29,8 @@ const SignIn = () => {
   }
 
   return (
-    <div className={styles.form}>
-      <h3 className={styles.heading}>Đăng nhập</h3>
+    <FormContainer>
+      <FormHeading>Đăng nhập</FormHeading>
       <Form
         name="normal_login"
         className="login-form"
@@ -90,7 +90,7 @@ const SignIn = () => {
           </Button>
         </div>
       </Form>
-    </div>
+    </FormContainer>
   )
 }
 

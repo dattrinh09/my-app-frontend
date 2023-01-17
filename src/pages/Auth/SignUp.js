@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Button, Form, Input } from 'antd'
-import styles from './Form.module.css'
 import { ConstanthPaths } from '../../constanth/constanth.path'
 import axiosInstance from '../../requests/axiosInstance'
+import { FormContainer, FormHeading } from './form-styles'
 
 const formItemLayout = {
   labelCol: {
@@ -11,7 +11,7 @@ const formItemLayout = {
           span: 24,
       },
       sm: {
-          span: 8,
+          span: 7,
       },
   },
   wrapperCol: {
@@ -19,7 +19,7 @@ const formItemLayout = {
           span: 24,
       },
       sm: {
-          span: 16,
+          span: 17,
       },
   },
 }
@@ -47,10 +47,10 @@ const SignUp = () => {
   }
 
   return (
-    <div className={styles.form}>
-      <h4 className={styles.heading}>
+    <FormContainer>
+      <FormHeading>
         Đăng ký
-      </h4>
+      </FormHeading>
       <Form
         {...formItemLayout}
         form={form}
@@ -148,7 +148,7 @@ const SignUp = () => {
           </Button>
         </div>
       </Form>
-    </div>
+    </FormContainer>
   )
 }
 
