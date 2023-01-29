@@ -1,15 +1,8 @@
-import { Dropdown, Input } from 'antd';
+import { Input } from 'antd';
 import React from 'react'
 import { ConstanthPaths } from '../../constanth/constanth.path'
 import MyLink from '../Link/Link'
-import { Container, HeaderButton, HeaderLayout, Item, Menu } from './header-styles';
-
-const items = [
-    {
-        key: '1',
-        label: '',
-    }
-]
+import { Container, HeaderLayout, Item, } from './header-styles';
 
 const Header = () => {
     return (
