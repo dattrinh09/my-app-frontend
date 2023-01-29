@@ -7,8 +7,8 @@ const Navigator = () => {
     <NavContainer>
         <Container>
             <MyLink name="Trang chủ" color="#fff" size="20px" />
-            <MyLink name="Danh mục" color="#fff" size="20px" />
-            <MyLink name="Hãng" color="#fff" size="20px" />
+            <MyLink name="Hãng sản xuất" color="#fff" size="20px" />
+            <MyLink name="Giá" color="#fff" size="20px" />
         </Container>
     </NavContainer>
   )

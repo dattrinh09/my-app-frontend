@@ -1,14 +1,16 @@
 import { Card, List } from 'antd';
 import React from 'react'
+import { Link } from 'react-router-dom';
 import MyLink from '../../components/Link/Link';
 import { ConstanthPaths } from '../../constanth/constanth.path';
+import { getProductRoute } from '../../ultis/route';
 import { Container, Price, Sec, Section, SubSec } from './home-page-styles'
 
 const products = []
 
-for(var i = 0; i < 25; i++) {
+for (var i = 0; i < 20; i++) {
   const product = {
-    id: "1",
+    id: `${i + 1}`,
     name: "iphone 14 pro max",
     price: 24000000,
     description: "6GB - 256GB",
@@ -24,20 +26,22 @@ const HomePage = () => {
       <Section>
         <h2>Sản phẩm</h2>
         <List
-          grid={{ column: 5 }}
+          grid={{ column: 4 }}
           dataSource={products}
           renderItem={item => (
             <List.Item>
-              <Card
-                hoverable
-                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                cover={<img alt='photo' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
-              >
-                <Sec>
-                  <h4>{item.name}</h4>
-                  <Price>{item.price} đ</Price>
-                </Sec>
-              </Card>
+              <Link key={item.id} to={getProductRoute(item.id)}>
+                <Card
+                  hoverable
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                  cover={<img alt='photo' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
+                >
+                  <Sec>
+                    <h4>{item.name}</h4>
+                    <Price>{item.price} đ</Price>
+                  </Sec>
+                </Card>
+              </Link>
             </List.Item>
           )}
         />
