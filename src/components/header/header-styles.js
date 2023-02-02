@@ -24,8 +24,9 @@ export const Menu = styled.div`
     gap: 30px;
 `
 
-export const HeaderButton = styled.div`
-    color: #fff;
+export const UserMenu = styled.div`
     font-size: 20px;
-    font-weight: 700; 
+    color: #333;
+    font-weight: 700;
+    cursor: pointer; 
 `
