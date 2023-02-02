@@ -30,5 +30,5 @@ export const Price = styled.span`
 export const SubSec = styled.div`
     position: absolute;
     right: 20px;
-    bottom: 0;
+    top: 80px;
 `

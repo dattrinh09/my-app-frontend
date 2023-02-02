@@ -1,6 +1,8 @@
 import { List, Card, Radio, Pagination } from 'antd'
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Header from '../../components/header/Header'
+import Navigator from '../../components/navigator/Navigator'
 import { getProductRoute } from '../../ultis/route'
 import { Container, Content, Heading, Pagin, Price, Sec, Section, SideBar, SideBarItem } from './product-list-styles'
 
@@ -82,80 +84,84 @@ const ProductList = () => {
   }, [page])
 
   return (
-    <Container>
-      <Content>
-        <SideBar>
-          <SideBarItem>
-            <h3>Hãng sản xuất</h3>
-            <div>
-              <Radio.Group
-                buttonStyle='solid'
-                value={brand}
-                onChange={e => setBrand(e.target.value)}
-                style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
-              >
-                <Radio value="ALL">Tất cả</Radio>
-                {brands.map(item => (
-                  <Radio key={item.id} value={item.name}>{item.name}</Radio>
-                ))}
-              </Radio.Group>
-            </div>
-          </SideBarItem>
-          <SideBarItem>
-            <h3>Mức giá</h3>
-            <div>
-              <Radio.Group
-                buttonStyle='solid'
-                value={price}
-                onChange={e => setPrice(e.target.value)}
-                style={{ display: "grid", gridTemplateColumns: "1fr" }}
-              >
-                <Radio value="ALL">Tất cả</Radio>
-                <Radio value="L_2">Dưới 2 triệu</Radio>
-                <Radio value="2_to_4">Từ 2 - 4 triệu</Radio>
-                <Radio value="4_to_7">Từ 4 - 7 triệu</Radio>
-                <Radio value="7_to_14">Từ 7 - 14 triệu</Radio>
-                <Radio value="G_14">Hơn 14 triệu</Radio>
-              </Radio.Group>
-            </div>
-          </SideBarItem>
-        </SideBar>
-        <Section>
-          <Heading><h2>Điện thoại: {products.length} sản phẩm</h2></Heading>
-          <Sec>
-            <List
-              grid={{ column: 3 }}
-              dataSource={listProducts}
-              renderItem={item => (
-                <List.Item>
-                  <Link key={item.id} to={getProductRoute(item.id)}>
-                    <Card
-                      hoverable
-                      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                      cover={<img alt='photo' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
-                    >
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <h4>{item.name}</h4>
-                        <Price>{item.price} đ</Price>
-                      </div>
-                    </Card>
-                  </Link>
-                </List.Item>
-              )}
-            />
-            <Pagin>
-              <Pagination
-                total={150}
-                pageSize={15}
-                defaultCurrent={page}
-                showSizeChanger={false}
-                onChange={p => setPage(p)}
+    <>
+      <Header />
+      <Navigator />
+      <Container>
+        <Content>
+          <SideBar>
+            <SideBarItem>
+              <h3>Hãng sản xuất</h3>
+              <div>
+                <Radio.Group
+                  buttonStyle='solid'
+                  value={brand}
+                  onChange={e => setBrand(e.target.value)}
+                  style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
+                >
+                  <Radio value="ALL">Tất cả</Radio>
+                  {brands.map(item => (
+                    <Radio key={item.id} value={item.name}>{item.name}</Radio>
+                  ))}
+                </Radio.Group>
+              </div>
+            </SideBarItem>
+            <SideBarItem>
+              <h3>Mức giá</h3>
+              <div>
+                <Radio.Group
+                  buttonStyle='solid'
+                  value={price}
+                  onChange={e => setPrice(e.target.value)}
+                  style={{ display: "grid", gridTemplateColumns: "1fr" }}
+                >
+                  <Radio value="ALL">Tất cả</Radio>
+                  <Radio value="L_2">Dưới 2 triệu</Radio>
+                  <Radio value="2_to_4">Từ 2 - 4 triệu</Radio>
+                  <Radio value="4_to_7">Từ 4 - 7 triệu</Radio>
+                  <Radio value="7_to_14">Từ 7 - 14 triệu</Radio>
+                  <Radio value="G_14">Hơn 14 triệu</Radio>
+                </Radio.Group>
+              </div>
+            </SideBarItem>
+          </SideBar>
+          <Section>
+            <Heading><h2>Điện thoại: {products.length} sản phẩm</h2></Heading>
+            <Sec>
+              <List
+                grid={{ column: 3 }}
+                dataSource={listProducts}
+                renderItem={item => (
+                  <List.Item>
+                    <Link key={item.id} to={getProductRoute(item.id)}>
+                      <Card
+                        hoverable
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                        cover={<img alt='photo' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
+                      >
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                          <h4>{item.name}</h4>
+                          <Price>{item.price} đ</Price>
+                        </div>
+                      </Card>
+                    </Link>
+                  </List.Item>
+                )}
               />
-            </Pagin>
-          </Sec>
-        </Section>
-      </Content>
-    </Container>
+              <Pagin>
+                <Pagination
+                  total={150}
+                  pageSize={15}
+                  defaultCurrent={page}
+                  showSizeChanger={false}
+                  onChange={p => setPage(p)}
+                />
+              </Pagin>
+            </Sec>
+          </Section>
+        </Content>
+      </Container>
+    </>
   )
 }
 

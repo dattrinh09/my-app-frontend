@@ -1,10 +1,28 @@
+import { Menu, MenuItem } from '@mui/material';
 import { Input } from 'antd';
 import React from 'react'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ConstanthPaths } from '../../constanth/constanth.path'
 import MyLink from '../Link/Link'
-import { Container, HeaderLayout, Item, } from './header-styles';
+import { Container, HeaderLayout, Item, UserMenu, } from './header-styles';
 
 const Header = () => {
+    const [anchorEl, setAnchorEl] = useState(null)
+    const navigate = useNavigate()
+
+    const handleSignOut = () => {
+        localStorage.removeItem("token")
+        localStorage.removeItem("userName")
+        localStorage.removeItem("userEmail")
+        setAnchorEl(null)
+    }
+
+    const handleOrder = () => {
+        navigate(ConstanthPaths.PRODUCT_LIST)
+        setAnchorEl(null)
+    }
+ 
     return (
         <HeaderLayout>
             <Container>
@@ -19,7 +37,33 @@ const Header = () => {
                     />
                 </Item>
                 <Item>
-                    <MyLink name="Đăng nhập" path={ConstanthPaths.SIGN_IN} color="#333" size="20px" />
+                    {!localStorage.getItem("token")
+                        ? (
+                            <MyLink name="Đăng nhập" path={ConstanthPaths.SIGN_IN} color="#333" size="20px" />
+                        ) : (
+                            <>
+                                <UserMenu onClick={e => setAnchorEl(e.currentTarget)}>{localStorage.getItem("userName")}</UserMenu>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorEl)}
+                                    onClose={() => setAnchorEl(null)}
+                                >
+                                    <MenuItem onClick={handleOrder}>Lịch sử mua hàng</MenuItem>
+                                    <MenuItem onClick={handleSignOut}>Đăng xuất</MenuItem>
+                                </Menu>
+                            </>
+                        )
+                    }
                 </Item>
             </Container >
         </HeaderLayout >
