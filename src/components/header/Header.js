@@ -15,6 +15,7 @@ const Header = () => {
         localStorage.removeItem("token")
         localStorage.removeItem("userName")
         localStorage.removeItem("userEmail")
+        localStorage.removeItem("isAdmin")
         setAnchorEl(null)
     }
 
