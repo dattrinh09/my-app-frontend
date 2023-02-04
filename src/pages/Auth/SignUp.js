@@ -33,11 +33,11 @@ const SignUp = () => {
     console.log('Received values of form: ', values)
     try{
       const body = {
-          name: values.name,
+          username: values.name,
           email: values.email,
-          password: values.password
+          password: values.password,
       }
-      await axiosInstance.post('auth/signUp', body)
+      await axiosInstance.post('api/auth/signup', body)
       navigate(ConstanthPaths.SIGN_IN)
   }catch (e) {
       console.log(e.response.status)
