@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import { ConstanthPaths } from '../../constanth/constanth.path'
+import { ConstanthPaths } from '../../constants/constants'
 
 const PrivateRoute = () => {
     const isAdmin = localStorage.getItem("isAdmin")

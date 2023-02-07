@@ -1,79 +1,26 @@
 import { List, Card, Radio, Pagination } from 'antd'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Header from '../../components/header/Header'
 import Navigator from '../../components/navigator/Navigator'
+import { getBrands } from '../../store/reducers/brandsSlice'
+import { getProducts } from '../../store/reducers/productsSlice'
+import { brandsSelector, productsSelector } from '../../store/selectors'
 import { getProductRoute } from '../../ultis/route'
+import { formatPrice } from '../../ultis/ulti'
 import { Container, Content, Heading, Pagin, Price, Sec, Section, SideBar, SideBarItem } from './product-list-styles'
 
-const brands = [
-  {
-    id: "1",
-    name: "Apple",
-    url: "a",
-  },
-  {
-    id: "2",
-    name: "Samsung",
-    url: "a",
-  },
-  {
-    id: "3",
-    name: "Nokia",
-    url: "a",
-  },
-  {
-    id: "4",
-    name: "Oppo",
-    url: "a",
-  },
-  {
-    id: "5",
-    name: "Xiaomi",
-    url: "a",
-  },
-  {
-    id: "6",
-    name: "Assus",
-    url: "a",
-  },
-  {
-    id: "7",
-    name: "Vivo",
-    url: "a",
-  },
-  {
-    id: "8",
-    name: "Realme",
-    url: "a",
-  },
-  {
-    id: "9",
-    name: "Masstel",
-    url: "a",
-  },
-  {
-    id: "10",
-    name: "Tecno",
-    url: "a",
-  },
-]
-
-const products = []
-
-for (var i = 0; i < 150; i++) {
-  const product = {
-    id: `${i + 1}`,
-    name: "iphone 14 pro max " + `${i + 1}`,
-    price: 24000000,
-    description: "6GB - 256GB",
-    brand: "apple",
-    url: "https://cdn.hoanghamobile.com/i/productlist/dsp/Uploads/2022/09/08/1111.png"
-  }
-  products.push(product);
-}
-
 const ProductList = () => {
+  const products = useSelector(productsSelector).products
+  const brands = useSelector(brandsSelector).brands
+  const dispath = useDispatch()
+
+  useEffect(() => {
+    dispath(getProducts())
+    dispath(getBrands())
+  }, [dispath])
+
   const [brand, setBrand] = useState("ALL")
   const [price, setPrice] = useState("ALL")
   const [page, setPage] = useState(1)
@@ -81,7 +28,7 @@ const ProductList = () => {
   const listProducts = useMemo(() => {
     const num = (page - 1) * 15
     return products.slice(num, num + 15)
-  }, [page])
+  }, [page, products])
 
   return (
     <>
@@ -101,7 +48,7 @@ const ProductList = () => {
                 >
                   <Radio value="ALL">Tất cả</Radio>
                   {brands.map(item => (
-                    <Radio key={item.id} value={item.name}>{item.name}</Radio>
+                    <Radio key={item.id} value={item.brand_name}>{item.brand_name}</Radio>
                   ))}
                 </Radio.Group>
               </div>
@@ -133,15 +80,15 @@ const ProductList = () => {
                 dataSource={listProducts}
                 renderItem={item => (
                   <List.Item>
-                    <Link key={item.id} to={getProductRoute(item.id)}>
+                    <Link key={item.id} to={getProductRoute(item.product_name)}>
                       <Card
                         hoverable
-                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                        cover={<img alt='photo' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
+                        cover={<img alt='photo' src={item.url} style={{ height: '120px', paddingTop: '20px' }} />}
                       >
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <h4>{item.name}</h4>
-                          <Price>{item.price} đ</Price>
+                          <h4>{item.product_name}</h4>
+                          <Price>{formatPrice(item.price)}</Price>
                         </div>
                       </Card>
                     </Link>
@@ -150,7 +97,7 @@ const ProductList = () => {
               />
               <Pagin>
                 <Pagination
-                  total={150}
+                  total={products.length}
                   pageSize={15}
                   defaultCurrent={page}
                   showSizeChanger={false}

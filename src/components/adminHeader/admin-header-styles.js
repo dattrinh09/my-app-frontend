@@ -12,4 +12,7 @@ export const Item = styled.div`
     font-size: 20px;
     color: #333;
     font-weight: 700;
+    &:last-child {
+        cursor: pointer;
+    }
 `

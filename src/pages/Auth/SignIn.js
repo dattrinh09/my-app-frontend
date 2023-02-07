@@ -1,18 +1,14 @@
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
 import { Button, Form, Input } from 'antd'
-import React, { useMemo, useState } from 'react'
-import { NavLink, useNavigate, useParams } from 'react-router-dom'
-import { ConstanthPaths } from '../../constanth/constanth.path'
+import React, { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { ConstanthPaths } from '../../constants/constants'
 import axiosInstance from '../../requests/axiosInstance'
 import { FormContainer, FormHeading } from './form-styles'
 
 const SignIn = () => {
   const [error, setError] = useState("")
   const navigate = useNavigate()
-  const apiUrl = useMemo(() => {
-    if(window.location.href === "http://localhost:3000/admin/sign-in") return "api/auth/admin/signin"
-    return "api/auth/signin"               
-  }, [window.location.href])
 
   const handleFinish = async values => {
     try {
@@ -20,19 +16,19 @@ const SignIn = () => {
         email: values.email,
         password: values.password
       }
-      const res = await axiosInstance.get("api/auth/signin", body)
+      const res = await axiosInstance.post("api/auth/signin", body)
       localStorage.setItem("token", res.data.access_token)
       localStorage.setItem("userName", res.data.user_info.username)
       localStorage.setItem("userEmail", res.data.user_info.email)
       console.log(res)
-      // if (res.data.user_info.is_admin == true) {
-      //   localStorage.setItem("isAdmin", "1")
-      //   navigate(ConstanthPaths.ADMIN_PRODUCT)
-      // }
-      // else {
-      //   localStorage.setItem("isAdmin", "2")
-      //   navigate(ConstanthPaths.HOME_PAGE)
-      // }
+      if (res.data.user_info.is_admin) {
+        localStorage.setItem("isAdmin", "1")
+        navigate(ConstanthPaths.ADMIN_PRODUCT)
+      }
+      else {
+        localStorage.setItem("isAdmin", "2")
+        navigate(ConstanthPaths.HOME_PAGE)
+      }
     } catch (e) {
       setError('E-mail hoặc Mật khẩu không chính xác!')
       throw new Error(e)

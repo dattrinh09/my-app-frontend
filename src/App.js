@@ -1,10 +1,16 @@
+import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import ScrollToTop from "./components/scrollToTop/ScrollToTop";
 import MyRoutes from "./routes/routes";
+import store from "./store";
 
 function App() {
   return (
     <BrowserRouter>
-      <MyRoutes />
+      <Provider store={store}>
+        <ScrollToTop />
+        <MyRoutes />
+      </Provider>
     </BrowserRouter>
   );
 }

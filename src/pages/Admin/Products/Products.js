@@ -1,82 +1,111 @@
-import { Button, Space, Table, Tag } from 'antd'
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import React, { useRef, useState } from 'react'
+import { Button, Space, Table, Tag, Input, Modal } from 'antd'
+import { EditOutlined, DeleteOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
+import React, { useEffect, useRef, useState } from 'react'
 import AdminHeader from '../../../components/adminHeader/AdminHeader'
 import AdminNavigator from '../../../components/adminNavigator/AdminNavigator'
 import { AddButton, Container, Content, ProductImg } from './products-styles'
+import AddForm from './AddForm'
+import EditForm from './EditForm'
+import { useDispatch, useSelector } from 'react-redux'
+import { productsSelector } from '../../../store/selectors'
+import { deleteProduct, getProducts } from '../../../store/reducers/productsSlice'
+import { formatPrice } from '../../../ultis/ulti'
 
-const brands = [
-  {
-    id: "1",
-    name: "Apple",
-  },
-  {
-    id: "2",
-    name: "Samsung",
-  },
-  {
-    id: "3",
-    name: "Nokia",
-  },
-  {
-    id: "4",
-    name: "Oppo",
-  },
-  {
-    id: "5",
-    name: "Xiaomi",
-  },
-  {
-    id: "6",
-    name: "Assus",
-  },
-  {
-    id: "7",
-    name: "Vivo",
-  },
-  {
-    id: "8",
-    name: "Realme",
-  },
-  {
-    id: "9",
-    name: "Masstel",
-  },
-  {
-    id: "10",
-    name: "Tecno",
-  },
-]
-
-const products = []
-
-for (var i = 0; i < 153; i++) {
-  const product = {
-    id: i + 1,
-    produc_name: "iphone 14 pro max " + `${i + 1}`,
-    price: 24000000,
-    description: "6GB - 256GB",
-    in_stock: 5,
-    brand: {
-      id: 1,
-      brand_name: "Apple",
-    },
-    url: "https://cdn.hoanghamobile.com/i/productlist/dsp/Uploads/2022/09/08/1111.png",
-
-  }
-  products.push(product);
-}
+const { confirm } = Modal
 
 const Products = () => {
-  const [searchText, setSearchText] = useState('')
-  const [searchedColumn, setSearchedColumn] = useState('')
+  // Lấy danh sách sản phẩm
+  const productsStore = useSelector(productsSelector)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getProducts())
+  }, [dispatch])
+
+  const data = productsStore.products.map(value => ({
+    key: value.id,
+    id: value.id,
+    product_name: value.product_name,
+    price: value.price,
+    in_stock: value.in_stock,
+    brand_name: value.brand.brand_name,
+    description: value.description,
+    url: value.url
+  }))
+
+  // Thêm sản phẩm
+  const [open, setOpen] = useState(false)
+
+  // Chỉnh sửa sản phẩm
+  const [selected, setSelected] = useState()
+
+  // Xóa sản phẩm
+  const handleDelete = (id) => {
+    confirm({
+      content: "Bạn muốn xóa sản phẩm này khỏi cơ sở dữ liệu?",
+      okText: "Đồng ý",
+      cancelText: "Hủy",
+      onOk() {
+        dispatch(deleteProduct(id))
+      }
+    })
+  }
+
+  // Hiển thị bảng
   const searchInput = useRef(null)
 
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm()
-    setSearchText(selectedKeys[0])
-    setSearchedColumn(dataIndex)
-  }
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, close }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder="Tìm kiếm ..."
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => confirm()}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+          >
+            Tìm kiếm
+          </Button>
+          <Button
+            size="small"
+            onClick={() => close()}
+          >
+            Đóng
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered && '#1890ff',
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+  });
 
   const columns = [
     {
@@ -88,6 +117,7 @@ const Products = () => {
       title: 'Tên',
       dataIndex: 'product_name',
       key: 'product_name',
+      ...getColumnSearchProps("product_name")
     },
     {
       title: 'Ảnh',
@@ -102,14 +132,16 @@ const Products = () => {
     },
     {
       title: 'Hãng sản xuất',
-      dataIndex: 'brand',
+      dataIndex: 'brand_name',
       key: 'brand',
+      ...getColumnSearchProps("brand_name"),
       render: (brand) => <Tag color="blue">{brand}</Tag>
     },
     {
       title: 'Giá',
       dataIndex: 'price',
       key: 'price',
+      render: (price) => <span>{formatPrice(price)}</span>
     },
     {
       title: 'Số lượng',
@@ -119,25 +151,14 @@ const Products = () => {
     {
       title: 'Hành động',
       key: 'actions',
-      render: () => (
+      render: (item) => (
         <Space size="middle">
-          <Button icon={<EditOutlined />}>Sửa</Button>
-          <Button icon={<DeleteOutlined />}>Xóa</Button>
+          <Button icon={<EditOutlined />} onClick={() => setSelected(item)}>Sửa</Button>
+          <Button icon={<DeleteOutlined />} danger onClick={() => handleDelete(item.id)}>Xóa</Button>
         </Space>
       )
     }
   ]
-
-  const data = products.map(value => ({
-    key: value.id,
-    id: value.id,
-    product_name: value.produc_name,
-    price: value.price,
-    in_stock: value.in_stock,
-    brand: value.brand.brand_name,
-    description: value.description,
-    url: value.url
-  }))
 
   return (
     <>
@@ -147,9 +168,18 @@ const Products = () => {
         <Content>
           <h2>Sản phẩm</h2>
           <AddButton>
-            <Button type="primary" size="large" icon={<PlusCircleOutlined />}>Thêm sản phẩm</Button>
+            <Button
+              type="primary"
+              size="large"
+              icon={<PlusCircleOutlined />}
+              onClick={() => setOpen(true)}
+            >
+              Thêm sản phẩm
+            </Button>
           </AddButton>
+          <AddForm open={open} handleClose={() => setOpen(false)} />
           <Table columns={columns} dataSource={data} />
+          {selected && <EditForm product={selected} handleClose={() => setSelected()} />}
         </Content>
       </Container>
     </>

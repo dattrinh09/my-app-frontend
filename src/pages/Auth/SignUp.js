@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Button, Form, Input } from 'antd'
-import { ConstanthPaths } from '../../constanth/constanth.path'
+import { ConstanthPaths } from '../../constants/constants'
 import axiosInstance from '../../requests/axiosInstance'
 import { FormContainer, FormHeading } from './form-styles'
 
