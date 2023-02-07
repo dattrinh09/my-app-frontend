@@ -25,6 +25,8 @@ export const Price = styled.span`
     padding: 4px 0;
     background-color: red;
     border-radius: 5px;
+    width: 150px;
+    margin: 0 auto;
 `
 
 export const SubSec = styled.div`

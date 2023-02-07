@@ -11,10 +11,6 @@ export const Content = styled.div`
     gap: 30px;
 `
 
-export const ProductImg = styled.img`
-    height: 70px;
-`
-
 export const AddButton = styled.div`
     width: 250px;
     margin: 0 auto;

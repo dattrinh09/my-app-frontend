@@ -3,7 +3,7 @@ import { Input } from 'antd';
 import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ConstanthPaths } from '../../constanth/constanth.path'
+import { ConstanthPaths } from '../../constants/constants'
 import MyLink from '../Link/Link'
 import { Container, HeaderLayout, Item, UserMenu, } from './header-styles';
 
@@ -23,7 +23,12 @@ const Header = () => {
         navigate(ConstanthPaths.PRODUCT_LIST)
         setAnchorEl(null)
     }
- 
+
+    const handleAdmin = () => {
+        navigate(ConstanthPaths.ADMIN_PRODUCT)
+        setAnchorEl(null)
+    }
+
     return (
         <HeaderLayout>
             <Container>
@@ -59,7 +64,11 @@ const Header = () => {
                                     open={Boolean(anchorEl)}
                                     onClose={() => setAnchorEl(null)}
                                 >
-                                    <MenuItem onClick={handleOrder}>Lịch sử mua hàng</MenuItem>
+                                    {localStorage.getItem("isAdmin") === "1" ? (
+                                        <MenuItem onClick={handleAdmin}>Trang quản lý</MenuItem>
+                                    ) : (
+                                        <MenuItem onClick={handleOrder}>Lịch sử mua hàng</MenuItem>
+                                    )}
                                     <MenuItem onClick={handleSignOut}>Đăng xuất</MenuItem>
                                 </Menu>
                             </>

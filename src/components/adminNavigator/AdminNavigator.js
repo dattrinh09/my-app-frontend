@@ -1,5 +1,5 @@
 import React from 'react'
-import { ConstanthPaths } from '../../constanth/constanth.path'
+import { ConstanthPaths } from '../../constants/constants'
 import MyLink from '../Link/Link'
 import { Container, NavContainer } from './admin-navigator-styles'
 

@@ -1,5 +1,5 @@
-import { ConstanthPaths } from "../constanth/constanth.path"
+import { ConstanthPaths } from "../constants/constants"
 
-export const getProductRoute = (id) => {
-    return ConstanthPaths.PRODUCT_DETAIL.replace(":id", id)
+export const getProductRoute = (product_name) => {
+    return ConstanthPaths.PRODUCT_DETAIL.replace(":product_name", product_name.replaceAll(" ", "-"))
 }
