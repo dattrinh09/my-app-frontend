@@ -8,9 +8,9 @@ import Navigator from '../../components/navigator/Navigator';
 import { ConstanthPaths } from '../../constants/constants';
 import { getProducts } from '../../store/reducers/productsSlice';
 import { productsSelector } from '../../store/selectors';
-import { getProductRoute } from '../../ultis/route';
+import { getProducRoute } from '../../ultis/route';
 import { formatPrice } from '../../ultis/ulti';
-import { Container, Price, Sec, Section, SubSec } from './home-page-styles'
+import { Container, Price, Sec, Section, SubSec, Title } from './home-page-styles'
 
 const HomePage = () => {
   const products = useSelector(productsSelector).products
@@ -35,14 +35,14 @@ const HomePage = () => {
             dataSource={products.slice(0, 20)}
             renderItem={item => (
               <List.Item>
-                <Link key={item.id} to={getProductRoute(item.product_name)}>
+                <Link key={item.id} to={getProducRoute(item.product_name)}>
                   <Card
                     hoverable
                     style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
                     cover={<img alt='photo' src={item.url} style={{ width: '120px', height: '120px', paddingTop: '20px' }} />}
                   >
                     <Sec>
-                      <h4>{item.product_name}</h4>
+                      <Title>{item.product_name}</Title>
                       <Price>{formatPrice(item.price)}</Price>
                     </Sec>
                   </Card>

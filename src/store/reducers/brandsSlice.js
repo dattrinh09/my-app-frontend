@@ -25,15 +25,13 @@ const brandsSlice = createSlice({
     name: 'brands',
     initialState: {
         brands: [],
-        severity: "",
+        severity: "info",
         message: "",
     },
     extraReducers: (builder) => {
         builder
             .addCase(getBrands.fulfilled, (state, action) => {
                 state.brands = action.payload
-                state.severity = ""
-                state.message = ""
             })
             .addCase(addBrand.fulfilled, (state, action) => {
                 state.brands.push(action.payload)
@@ -42,7 +40,7 @@ const brandsSlice = createSlice({
             })
             .addCase(addBrand.rejected, (state) => {
                 state.severity = "error"
-                state.message = "Tên đã tồn tại!"
+                state.message = "Thêm mới không thành công!"
             })
             .addCase(updateBrand.fulfilled, (state, action) => {
                 state.brands = state.brands.map(item => {
@@ -56,12 +54,16 @@ const brandsSlice = createSlice({
             })
             .addCase(updateBrand.rejected, (state) => {
                 state.severity = "error"
-                state.message = "Tên đã tồn tại!"
+                state.message = "Cập nhật không thành công!"
             })
             .addCase(deleteBrand.fulfilled, (state, action) => {
                 state.brands = state.brands.filter(item => item.id !== action.payload)
                 state.status = "success"
                 state.message = "Xóa thành công!"
+            })
+            .addCase(deleteBrand.rejected, (state) => {
+                state.status = "error"
+                state.message = "Xóa không thành công!"
             })
     }
 })

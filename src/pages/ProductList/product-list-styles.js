@@ -33,6 +33,9 @@ export const Sec = styled.div`
     border-radius: 10px;
     background: #eee;
 `
+export const Title = styled.h4`
+    text-align: center;
+`
 
 export const Price = styled.span`
     text-align: center;

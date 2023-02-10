@@ -18,6 +18,9 @@ const routes = () => {
       <Route path={ConstanthPaths.SIGN_UP} element={<SignUp />} />
       <Route path={ConstanthPaths.PRODUCT_LIST} element={<ProductList />} />
       <Route path={ConstanthPaths.PRODUCT_DETAIL} element={<ProductDetail />} />
+      <Route path={ConstanthPaths.PRODUCT_BRAND} element={<ProductList />} />
+      <Route path={ConstanthPaths.PRODUCT_PRICE} element={<ProductList />} />
+      <Route path={ConstanthPaths.PRODUCT_BRAND_PRICE} element={<ProductList />} />
       <Route path={ConstanthPaths.ADMIN_SIGN_IN} element={<SignIn />} />
       <Route element={<PrivateRoute />}>
         <Route path={ConstanthPaths.ADMIN_PRODUCT} element={<Products />} />

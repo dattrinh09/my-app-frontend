@@ -1,34 +1,74 @@
 import { List, Card, Radio, Pagination } from 'antd'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import Header from '../../components/header/Header'
 import Navigator from '../../components/navigator/Navigator'
+import { ConstanthPaths, FilterPrice } from '../../constants/constants'
 import { getBrands } from '../../store/reducers/brandsSlice'
-import { getProducts } from '../../store/reducers/productsSlice'
+import { getFilterProducts } from '../../store/reducers/productsSlice'
 import { brandsSelector, productsSelector } from '../../store/selectors'
-import { getProductRoute } from '../../ultis/route'
+import { getProducRoute, getProductByBrandAndPriceRoute, getProductByBrandRoute, getProductByPriceRoute } from '../../ultis/route'
 import { formatPrice } from '../../ultis/ulti'
-import { Container, Content, Heading, Pagin, Price, Sec, Section, SideBar, SideBarItem } from './product-list-styles'
+import { Container, Content, Heading, Pagin, Price, Sec, Section, SideBar, SideBarItem, Title } from './product-list-styles'
 
 const ProductList = () => {
-  const products = useSelector(productsSelector).products
-  const brands = useSelector(brandsSelector).brands
+  const params = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate()
+
+  const { filterProducts, totals } = useSelector(productsSelector)
+  const [page, setPage] = useState(1)
+  const { brands } = useSelector(brandsSelector)
   const dispath = useDispatch()
 
+  const [brand, setBrand] = useState(() => {
+    return params.brand_name ? params.brand_name : "ALL"
+  })
+  const [price, setPrice] = useState(() => {
+    var p
+    if (params.price) p = params.price
+    else if (searchParams.get("gia-tien")) p = searchParams.get("gia-tien")
+    else p = "ALL"
+    return p 
+  })
+
   useEffect(() => {
-    dispath(getProducts())
     dispath(getBrands())
-  }, [dispath])
+    dispath(getFilterProducts({
+      page: page,
+      perPage: 15,
+      brandName: brand,
+      price: price
+    }))
+  }, [dispath, page, brand, price])
 
-  const [brand, setBrand] = useState("ALL")
-  const [price, setPrice] = useState("ALL")
-  const [page, setPage] = useState(1)
 
-  const listProducts = useMemo(() => {
-    const num = (page - 1) * 15
-    return products.slice(num, num + 15)
-  }, [page, products])
+  const handleChangeBrand = e => {
+    const value = e.target.value
+    if(value !== "ALL") {
+      setBrand(value)
+      if(price !== "ALL") navigate(getProductByBrandAndPriceRoute(value, price))
+      else navigate(getProductByBrandRoute(value))
+    } else {
+      setBrand("ALL")
+      if(price !== "ALL") navigate(getProductByPriceRoute(price))
+      else navigate(ConstanthPaths.PRODUCT_LIST)
+    }
+  }
+
+  const handleChangePrice = e => {
+    const value = e.target.value
+    if(value !== "ALL") {
+      setPrice(value)
+      if(!params.brand_name) navigate(getProductByPriceRoute(value))
+      else setSearchParams({"gia-tien": value})
+    } else {
+      setPrice("ALL")
+      if(!params.brand_name) navigate(ConstanthPaths.PRODUCT_LIST)
+      else setSearchParams({})
+    }
+  }
 
   return (
     <>
@@ -43,7 +83,7 @@ const ProductList = () => {
                 <Radio.Group
                   buttonStyle='solid'
                   value={brand}
-                  onChange={e => setBrand(e.target.value)}
+                  onChange={handleChangeBrand}
                   style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
                 >
                   <Radio value="ALL">Tất cả</Radio>
@@ -59,35 +99,33 @@ const ProductList = () => {
                 <Radio.Group
                   buttonStyle='solid'
                   value={price}
-                  onChange={e => setPrice(e.target.value)}
+                  onChange={handleChangePrice}
                   style={{ display: "grid", gridTemplateColumns: "1fr" }}
                 >
                   <Radio value="ALL">Tất cả</Radio>
-                  <Radio value="L_2">Dưới 2 triệu</Radio>
-                  <Radio value="2_to_4">Từ 2 - 4 triệu</Radio>
-                  <Radio value="4_to_7">Từ 4 - 7 triệu</Radio>
-                  <Radio value="7_to_14">Từ 7 - 14 triệu</Radio>
-                  <Radio value="G_14">Hơn 14 triệu</Radio>
+                  {FilterPrice.map(item => (
+                    <Radio key={item.key} value={item.value}>{item.label}</Radio>
+                  ))}
                 </Radio.Group>
               </div>
             </SideBarItem>
           </SideBar>
           <Section>
-            <Heading><h2>Điện thoại: {products.length} sản phẩm</h2></Heading>
+            <Heading><h2>Điện thoại: {totals} sản phẩm</h2></Heading>
             <Sec>
               <List
                 grid={{ column: 3 }}
-                dataSource={listProducts}
+                dataSource={filterProducts}
                 renderItem={item => (
                   <List.Item>
-                    <Link key={item.id} to={getProductRoute(item.product_name)}>
+                    <Link key={item.id} to={getProducRoute(item.product_name)}>
                       <Card
                         hoverable
                         style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
                         cover={<img alt='photo' src={item.url} style={{ height: '120px', paddingTop: '20px' }} />}
                       >
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <h4>{item.product_name}</h4>
+                          <Title>{item.product_name}</Title>
                           <Price>{formatPrice(item.price)}</Price>
                         </div>
                       </Card>
@@ -97,7 +135,7 @@ const ProductList = () => {
               />
               <Pagin>
                 <Pagination
-                  total={products.length}
+                  total={totals}
                   pageSize={15}
                   defaultCurrent={page}
                   showSizeChanger={false}

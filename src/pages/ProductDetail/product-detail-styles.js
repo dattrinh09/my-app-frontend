@@ -4,6 +4,13 @@ export const Container = styled.div`
     width: 1200px;
     margin: 0 auto;
 `
+export const Loader = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+`
+
 export const Content = styled.div`
     padding: 50px 0;
     display: flex;
@@ -45,13 +52,11 @@ export const SubHeading = styled.span`
 export const Brand = styled.span`
     font-size: 20px;
     font-weight: 600;
-    padding: 5px 0;
+    padding: 3px 15px;
     background-color: blue;
     text-align: center;
-    width: 120px;
-    border-radius: 10px;
+    border-radius: 5px;
     color: #fff;
-    cursor: pointer;
 `
 
 export const Price = styled.span`
@@ -66,6 +71,10 @@ export const BuyButton = styled.button`
     background-color: red;
     padding: 10px 0;
     cursor: pointer;
+    &:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
 `
 
 export const ButtonContent = styled.p`

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AdminHeader from '../../../components/adminHeader/AdminHeader'
 import AdminNavigator from '../../../components/adminNavigator/AdminNavigator'
+import Notifi from '../../../components/notifi/Notifi'
 import { addBrand, deleteBrand, getBrands, updateBrand } from '../../../store/reducers/brandsSlice'
 import { brandsSelector } from '../../../store/selectors'
 import { AddButton, Container, Content } from './brands-styles'
@@ -11,15 +12,17 @@ import { AddButton, Container, Content } from './brands-styles'
 const { confirm } = Modal
 
 const Brands = () => {
+    // Thông báo
+    const [openMessage, setOpenMessage] = useState(false)
     // Lấy dữ liệu
-    const brandsStore = useSelector(brandsSelector)
+    const { brands, severity, message } = useSelector(brandsSelector)
     const distpatch = useDispatch()
 
     useEffect(() => {
         distpatch(getBrands())
     }, [distpatch])
 
-    const data = brandsStore.brands.map(value => ({
+    const data = brands.map(value => ({
         key: value.id,
         id: value.id,
         brand_name: value.brand_name
@@ -36,6 +39,7 @@ const Brands = () => {
                 addForm.resetFields()
                 distpatch(addBrand(values))
                 setOpen(false)
+                setOpenMessage(true)
             })
             .catch(info => {
                 console.log("Validate Failed: ", info)
@@ -60,6 +64,7 @@ const Brands = () => {
                 editForm.resetFields()
                 distpatch(updateBrand({ id: selected.id, data: values }))
                 setSelected()
+                setOpenMessage(true)
             })
             .catch(info => {
                 console.log("Validate Failed: ", info)
@@ -69,11 +74,12 @@ const Brands = () => {
     // Xóa
     const handleDelete = (id) => {
         confirm({
-            content: "Bạn muốn xóa sản phẩm này khỏi cơ sở dữ liệu? Bạn sẽ xóa luôn những sản phẩm thuộc hãng này!",
+            content: "Bạn muốn xóa hãng sản xuất này khỏi cơ sở dữ liệu? Bạn sẽ xóa luôn những sản phẩm thuộc hãng này!",
             okText: "Đồng ý",
             cancelText: "Hủy",
             onOk() {
                 distpatch(deleteBrand(id))
+                setOpenMessage(true)
             }
         })
     }
@@ -175,6 +181,14 @@ const Brands = () => {
                         </Form>
                     </Modal>
                 </Content>
+                {openMessage &&
+                    <Notifi
+                        open={openMessage}
+                        severity={severity}
+                        message={message}
+                        onClose={() => setOpenMessage(false)}
+                    />
+                }
             </Container>
         </>
     )

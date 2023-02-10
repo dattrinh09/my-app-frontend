@@ -18,6 +18,10 @@ export const Sec = styled.div`
     flex-direction: column;
 `
 
+export const Title = styled.h4`
+    text-align: center;
+`
+
 export const Price = styled.span`
     text-align: center;
     color: #fff;
