@@ -30,7 +30,6 @@ const SignUp = () => {
   const navigate = useNavigate()
 
   const handleFinish = async values => {
-    console.log('Received values of form: ', values)
     try{
       const body = {
           username: values.name,

@@ -1,33 +1,45 @@
-import { Menu, MenuItem } from '@mui/material';
-import { Input } from 'antd';
+import { Dropdown, Input } from 'antd';
 import React from 'react'
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ConstanthPaths } from '../../constants/constants'
+import { getProductBySearch } from '../../ultis/route';
 import MyLink from '../Link/Link'
 import { Container, HeaderLayout, Item, UserMenu, } from './header-styles';
 
 const Header = () => {
-    const [anchorEl, setAnchorEl] = useState(null)
+    const [keyword, setKeyword] = useState("")
     const navigate = useNavigate()
+
+    const handleSearch = () => {
+        setKeyword("")
+        navigate(getProductBySearch(keyword))
+    }
 
     const handleSignOut = () => {
         localStorage.removeItem("token")
         localStorage.removeItem("userName")
         localStorage.removeItem("userEmail")
         localStorage.removeItem("isAdmin")
-        setAnchorEl(null)
+        navigate(ConstanthPaths.HOME_PAGE)
     }
 
-    const handleOrder = () => {
-        navigate(ConstanthPaths.PRODUCT_LIST)
-        setAnchorEl(null)
-    }
-
-    const handleAdmin = () => {
-        navigate(ConstanthPaths.ADMIN_PRODUCT)
-        setAnchorEl(null)
-    }
+    const items = [
+        {
+            key: '1',
+            label: (
+                <div onClick={handleSignOut}>Đăng xuất</div>
+            ),
+        },
+        {
+            key: '2',
+            label: (
+                <Link to={localStorage.getItem("isAdmin") === "1" ? ConstanthPaths.ADMIN_PRODUCT : ConstanthPaths.PRODUCT_LIST}>
+                    {localStorage.getItem("isAdmin") === "1" ? "Trang quản lý" : "Lịch sử mua hàng"}
+                </Link>
+            ),
+        }
+    ]
 
     return (
         <HeaderLayout>
@@ -40,6 +52,10 @@ const Header = () => {
                         placeholder="Tìm kiếm theo tên sản phẩm ..."
                         enterButton="Tìm kiếm"
                         size="large"
+                        value={keyword}
+                        onChange={e => setKeyword(e.target.value)}
+                        onSearch={handleSearch}
+                        onPressEnter={handleSearch}
                     />
                 </Item>
                 <Item>
@@ -47,33 +63,19 @@ const Header = () => {
                         ? (
                             <MyLink name="Đăng nhập" path={ConstanthPaths.SIGN_IN} color="#333" size="20px" />
                         ) : (
-                            <>
-                                <UserMenu onClick={e => setAnchorEl(e.currentTarget)}>{localStorage.getItem("userName")}</UserMenu>
-                                <Menu
-                                    id="menu-appbar"
-                                    anchorEl={anchorEl}
-                                    anchorOrigin={{
-                                        vertical: 'bottom',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorEl)}
-                                    onClose={() => setAnchorEl(null)}
-                                >
-                                    {localStorage.getItem("isAdmin") === "1" ? (
-                                        <MenuItem onClick={handleAdmin}>Trang quản lý</MenuItem>
-                                    ) : (
-                                        <MenuItem onClick={handleOrder}>Lịch sử mua hàng</MenuItem>
-                                    )}
-                                    <MenuItem onClick={handleSignOut}>Đăng xuất</MenuItem>
-                                </Menu>
-                            </>
-                        )
-                    }
+                            <Dropdown
+                                menu={{
+                                    items,
+                                }}
+                                trigger={["click"]}
+                                placement="bottomRight"
+                                arrow
+                            >
+                                <UserMenu>
+                                    {localStorage.getItem("userName")}
+                                </UserMenu>
+                            </Dropdown>
+                        )}
                 </Item>
             </Container >
         </HeaderLayout >

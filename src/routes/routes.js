@@ -9,6 +9,7 @@ import ProductList from '../pages/ProductList/ProductList'
 import Products from '../pages/Admin/Products/Products'
 import PrivateRoute from '../components/privateRoute/PrivateRoute'
 import Brands from '../pages/Admin/Brands/Brands'
+import ProductSearch from '../pages/ProductList/ProductSearch/ProductSearch'
 
 const routes = () => {
   return (
@@ -17,9 +18,10 @@ const routes = () => {
       <Route path={ConstanthPaths.SIGN_IN} element={<SignIn />} />
       <Route path={ConstanthPaths.SIGN_UP} element={<SignUp />} />
       <Route path={ConstanthPaths.PRODUCT_LIST} element={<ProductList />} />
-      <Route path={ConstanthPaths.PRODUCT_DETAIL} element={<ProductDetail />} />
       <Route path={ConstanthPaths.PRODUCT_BRAND} element={<ProductList />} />
       <Route path={ConstanthPaths.PRODUCT_PRICE} element={<ProductList />} />
+      <Route path={ConstanthPaths.PRODUCT_SEARCH} element={<ProductSearch />} />
+      <Route path={ConstanthPaths.PRODUCT_DETAIL} element={<ProductDetail />} />
       <Route path={ConstanthPaths.PRODUCT_BRAND_PRICE} element={<ProductList />} />
       <Route path={ConstanthPaths.ADMIN_SIGN_IN} element={<SignIn />} />
       <Route element={<PrivateRoute />}>

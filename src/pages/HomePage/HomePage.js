@@ -6,18 +6,23 @@ import Header from '../../components/header/Header';
 import MyLink from '../../components/Link/Link';
 import Navigator from '../../components/navigator/Navigator';
 import { ConstanthPaths } from '../../constants/constants';
-import { getProducts } from '../../store/reducers/productsSlice';
+import { getFilterProducts } from '../../store/reducers/productsSlice';
 import { productsSelector } from '../../store/selectors';
 import { getProducRoute } from '../../ultis/route';
 import { formatPrice } from '../../ultis/ulti';
 import { Container, Price, Sec, Section, SubSec, Title } from './home-page-styles'
 
 const HomePage = () => {
-  const products = useSelector(productsSelector).products
+  const { filterProducts } = useSelector(productsSelector)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getProducts())
+    dispatch(getFilterProducts({
+      page: 1,
+      perPage: 12,
+      brandName: "ALL",
+      price: "ALL"
+    }))
   }, [dispatch])
 
   return (
@@ -32,14 +37,14 @@ const HomePage = () => {
           </SubSec>
           <List
             grid={{ column: 4 }}
-            dataSource={products.slice(0, 20)}
+            dataSource={filterProducts}
             renderItem={item => (
               <List.Item>
                 <Link key={item.id} to={getProducRoute(item.product_name)}>
                   <Card
                     hoverable
                     style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
-                    cover={<img alt='photo' src={item.url} style={{ width: '120px', height: '120px', paddingTop: '20px' }} />}
+                    cover={<img alt='photo' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
                   >
                     <Sec>
                       <Title>{item.product_name}</Title>

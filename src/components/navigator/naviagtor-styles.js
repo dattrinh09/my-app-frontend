@@ -15,3 +15,24 @@ export const Container = styled.div`
     align-items:  center;
     height: 54px;
 `
+
+export const Item = styled.div`
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+`
+
+export const BrandMenu = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 210px;
+    height: 80px;
+    text-align: center;
+`
+
+export const PriceMenu = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+`
