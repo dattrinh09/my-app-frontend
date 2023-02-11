@@ -20,7 +20,6 @@ const SignIn = () => {
       localStorage.setItem("token", res.data.access_token)
       localStorage.setItem("userName", res.data.user_info.username)
       localStorage.setItem("userEmail", res.data.user_info.email)
-      console.log(res)
       if (res.data.user_info.is_admin) {
         localStorage.setItem("isAdmin", "1")
         navigate(ConstanthPaths.ADMIN_PRODUCT)

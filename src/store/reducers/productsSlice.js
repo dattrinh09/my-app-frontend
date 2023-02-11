@@ -7,7 +7,6 @@ export const getProducts = createAsyncThunk('products/getProducts', async () => 
 })
 
 export const getFilterProducts = createAsyncThunk('products/getFilterProducts', async filters => {
-    console.log("Filter", filters)
     const params = {
         page: filters.page,
         per_page: filters.perPage,
@@ -25,7 +24,20 @@ export const getFilterProducts = createAsyncThunk('products/getFilterProducts', 
     const res = await axiosInstance.get('api/product/page', { params: params })
     return {
         products: res.data.products,
-        totals: res.data.total
+        total: res.data.total
+    } 
+})
+
+export const getSearchProducts = createAsyncThunk('products/getSearchProducts', async filters => {
+    const params = {
+        page: filters.page,
+        per_page: filters.perPage,
+        keyword: filters.keyword
+    }
+    const res = await axiosInstance.get('api/product/search', { params: params })
+    return {
+        products: res.data.products,
+        total: res.data.total
     } 
 })
 
@@ -49,7 +61,7 @@ const productsSlice = createSlice({
     initialState: {
         products: [],
         filterProducts: [],
-        totals: 0,
+        total: 0,
     },
     extraReducers: (builder) => {
         builder
@@ -58,7 +70,11 @@ const productsSlice = createSlice({
             })
             .addCase(getFilterProducts.fulfilled, (state, action) => {
                 state.filterProducts = action.payload.products
-                state.totals = action.payload.totals
+                state.total = action.payload.total
+            })
+            .addCase(getSearchProducts.fulfilled, (state, action) => {
+                state.filterProducts = action.payload.products
+                state.total = action.payload.total
             })
             .addCase(addProduct.fulfilled, (state, action) => {
                 state.products.push(action.payload)

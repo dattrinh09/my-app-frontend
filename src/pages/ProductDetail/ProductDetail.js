@@ -44,10 +44,10 @@ const ProductDetail = () => {
     }, [products, productName])
 
     const relatedProducts = useMemo(() => {
-        return products.filter(item =>
+        return selectedProduct ? products.filter(item =>
             item.brand.brand_name === selectedProduct.brand.brand_name
             && item.product_name !== selectedProduct.product_name
-        ).slice(0, 4)
+        ).slice(0, 4) : null
     }, [selectedProduct, products])
 
     // Đặt hàng

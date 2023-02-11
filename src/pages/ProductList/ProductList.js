@@ -1,4 +1,4 @@
-import { List, Card, Radio, Pagination } from 'antd'
+import { List, Card, Radio, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -17,32 +17,38 @@ const ProductList = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
 
-  const { filterProducts, totals } = useSelector(productsSelector)
+  const { filterProducts, total } = useSelector(productsSelector)
+  const [listProducts, setListProducts] = useState([])
   const [page, setPage] = useState(1)
   const { brands } = useSelector(brandsSelector)
   const dispath = useDispatch()
 
-  const [brand, setBrand] = useState(() => {
-    return params.brand_name ? params.brand_name : "ALL"
-  })
-  const [price, setPrice] = useState(() => {
-    var p
-    if (params.price) p = params.price
-    else if (searchParams.get("gia-tien")) p = searchParams.get("gia-tien")
-    else p = "ALL"
-    return p 
-  })
+  const [brand, setBrand] = useState("ALL")
+  const [price, setPrice] = useState("ALL")
+
+  useEffect(() => {
+    setPage(1)
+    if(params.brand_name) setBrand(params.brand_name)
+    else setBrand("ALL")
+    if (params.price) setPrice(params.price)
+    else if (searchParams.get("gia-tien")) setPrice(searchParams.get("gia-tien"))
+    else setPrice("ALL")
+  }, [params, searchParams])
 
   useEffect(() => {
     dispath(getBrands())
     dispath(getFilterProducts({
       page: page,
-      perPage: 15,
+      perPage: 9,
       brandName: brand,
       price: price
     }))
   }, [dispath, page, brand, price])
 
+  useEffect(() => {
+    if(page === 1) setListProducts(filterProducts)
+    else setListProducts([...listProducts, ...filterProducts])
+  }, [filterProducts])
 
   const handleChangeBrand = e => {
     const value = e.target.value
@@ -111,11 +117,12 @@ const ProductList = () => {
             </SideBarItem>
           </SideBar>
           <Section>
-            <Heading><h2>Điện thoại: {totals} sản phẩm</h2></Heading>
+            <Heading><h2>Điện thoại: {total} sản phẩm</h2></Heading>
             <Sec>
               <List
                 grid={{ column: 3 }}
-                dataSource={filterProducts}
+                loading={!listProducts}
+                dataSource={listProducts}
                 renderItem={item => (
                   <List.Item>
                     <Link key={item.id} to={getProducRoute(item.product_name)}>
@@ -134,13 +141,7 @@ const ProductList = () => {
                 )}
               />
               <Pagin>
-                <Pagination
-                  total={totals}
-                  pageSize={15}
-                  defaultCurrent={page}
-                  showSizeChanger={false}
-                  onChange={p => setPage(p)}
-                />
+                {listProducts.length < total && <Button size="large" onClick={() => setPage(page + 1)}>Xem thêm</Button>}
               </Pagin>
             </Sec>
           </Section>
