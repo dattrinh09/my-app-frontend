@@ -2,8 +2,7 @@ import { List, Card, Radio, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import Header from '../../components/header/Header'
-import Navigator from '../../components/navigator/Navigator'
+import MainLayout from '../../components/layout/MainLayout'
 import { ConstanthPaths, FilterPrice } from '../../constants/constants'
 import { getBrands } from '../../store/reducers/brandsSlice'
 import { getFilterProducts } from '../../store/reducers/productsSlice'
@@ -28,7 +27,7 @@ const ProductList = () => {
 
   useEffect(() => {
     setPage(1)
-    if(params.brand_name) setBrand(params.brand_name)
+    if (params.brand_name) setBrand(params.brand_name)
     else setBrand("ALL")
     if (params.price) setPrice(params.price)
     else if (searchParams.get("gia-tien")) setPrice(searchParams.get("gia-tien"))
@@ -46,40 +45,38 @@ const ProductList = () => {
   }, [dispath, page, brand, price])
 
   useEffect(() => {
-    if(page === 1) setListProducts(filterProducts)
+    if (page === 1) setListProducts(filterProducts)
     else setListProducts([...listProducts, ...filterProducts])
   }, [filterProducts])
 
   const handleChangeBrand = e => {
     const value = e.target.value
-    if(value !== "ALL") {
+    if (value !== "ALL") {
       setBrand(value)
-      if(price !== "ALL") navigate(getProductByBrandAndPriceRoute(value, price))
+      if (price !== "ALL") navigate(getProductByBrandAndPriceRoute(value, price))
       else navigate(getProductByBrandRoute(value))
     } else {
       setBrand("ALL")
-      if(price !== "ALL") navigate(getProductByPriceRoute(price))
+      if (price !== "ALL") navigate(getProductByPriceRoute(price))
       else navigate(ConstanthPaths.PRODUCT_LIST)
     }
   }
 
   const handleChangePrice = e => {
     const value = e.target.value
-    if(value !== "ALL") {
+    if (value !== "ALL") {
       setPrice(value)
-      if(!params.brand_name) navigate(getProductByPriceRoute(value))
-      else setSearchParams({"gia-tien": value})
+      if (!params.brand_name) navigate(getProductByPriceRoute(value))
+      else setSearchParams({ "gia-tien": value })
     } else {
       setPrice("ALL")
-      if(!params.brand_name) navigate(ConstanthPaths.PRODUCT_LIST)
+      if (!params.brand_name) navigate(ConstanthPaths.PRODUCT_LIST)
       else setSearchParams({})
     }
   }
 
   return (
-    <>
-      <Header />
-      <Navigator />
+    <MainLayout>
       <Container>
         <Content>
           <SideBar>
@@ -129,7 +126,7 @@ const ProductList = () => {
                       <Card
                         hoverable
                         style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
-                        cover={<img alt='photo' src={item.url} style={{ height: '120px', paddingTop: '20px' }} />}
+                        cover={<img alt='phone' src={item.url} style={{ height: '120px', paddingTop: '20px' }} />}
                       >
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                           <Title>{item.product_name}</Title>
@@ -147,7 +144,7 @@ const ProductList = () => {
           </Section>
         </Content>
       </Container>
-    </>
+    </MainLayout>
   )
 }
 

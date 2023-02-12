@@ -13,8 +13,8 @@ export const FormContainer = styled.div`
     box-shadow: 0 2px 5px 0 rgba(51, 62, 73, 0.1);
     margin-bottom: 300px;
 `
-export const FormHeading = styled.h3`
-    font-size: 30px;
+export const FormHeading = styled.div`
+    font-size: 20px;
     font-weight: bold;
     margin-bottom: 20px;
 `

@@ -12,7 +12,7 @@ export const Content = styled.div`
 `
 
 export const ProductImg = styled.img`
-    height: 70px;
+    width: 70px;
 `
 
 export const AddButton = styled.div`

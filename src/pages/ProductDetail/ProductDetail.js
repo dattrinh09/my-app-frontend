@@ -1,10 +1,9 @@
 import { Button, Card, Form, Input, List, Modal, Pagination, Rate, Spin } from 'antd';
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import Header from '../../components/header/Header';
-import Navigator from '../../components/navigator/Navigator';
+import MainLayout from '../../components/layout/MainLayout';
 import { getProducts } from '../../store/reducers/productsSlice';
 import { productsSelector } from '../../store/selectors';
 import { getProducRoute, getProductByBrandRoute } from '../../ultis/route';
@@ -86,9 +85,7 @@ const ProductDetail = () => {
     }
 
     return (
-        <>
-            <Header />
-            <Navigator />
+        <MainLayout>
             <Container>
                 {!selectedProduct ?
                     (
@@ -164,7 +161,7 @@ const ProductDetail = () => {
                                                 <Card
                                                     hoverable
                                                     style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
-                                                    cover={<img alt='photo' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
+                                                    cover={<img alt='phone' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
                                                 >
                                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                                                         <h4>{item.product_name}</h4>
@@ -257,7 +254,7 @@ const ProductDetail = () => {
                         </Content>
                     )}
             </Container>
-        </>
+        </MainLayout>
     )
 }
 

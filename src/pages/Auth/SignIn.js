@@ -1,7 +1,7 @@
 import { LockOutlined, MailOutlined } from '@ant-design/icons'
 import { Button, Form, Input } from 'antd'
 import React, { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ConstanthPaths } from '../../constants/constants'
 import axiosInstance from '../../requests/axiosInstance'
 import { FormContainer, FormHeading } from './form-styles'
@@ -39,11 +39,11 @@ const SignIn = () => {
       <FormHeading>Đăng nhập</FormHeading>
       <Form
         name="normal_login"
-        className="login-form"
         initialValues={{
           remember: true,
         }}
         onFinish={handleFinish}
+        onFocus={() => setError("")}
       >
         <Form.Item
           name="email"
@@ -55,7 +55,7 @@ const SignIn = () => {
           ]}
         >
           <Input
-            prefix={<MailOutlined className="site-form-item-icon" />}
+            prefix={<MailOutlined />}
             type="email"
             placeholder="E-Mail"
           />
@@ -70,31 +70,22 @@ const SignIn = () => {
           ]}
         >
           <Input
-            prefix={<LockOutlined className="site-form-item-icon" />}
+            prefix={<LockOutlined />}
             type="password"
             placeholder="Mật khẩu"
           />
         </Form.Item>
         {error && <span style={{ color: 'red' }}>{error}</span>}
-        <br />
-        <span>
-          Nếu bạn chưa có tài khoản hãy nhấn vào
-          <NavLink
-            style={{ color: "blue" }}
-            to={ConstanthPaths.SIGN_UP}
-          > đây.
-          </NavLink>
-        </span>
-        <div>
+        <Form.Item>Nếu bạn chưa có tài khoản. Nhấn vào <Link to={ConstanthPaths.SIGN_UP}>đây.</Link></Form.Item>
+        <Form.Item>
           <Button
-            className="form-btn"
             type='primary'
             htmlType="submit"
-            style={{ margin: "20px 0" }}
+            style={{ width: "100px" }}
           >
             Đăng nhập
           </Button>
-        </div>
+        </Form.Item>
       </Form>
     </FormContainer>
   )

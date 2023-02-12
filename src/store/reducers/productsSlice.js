@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../requests/axiosInstance";
+import { showNotification } from "../../ultis/notification";
 
 export const getProducts = createAsyncThunk('products/getProducts', async () => {
     const res = await axiosInstance.get('api/product')
@@ -78,6 +79,10 @@ const productsSlice = createSlice({
             })
             .addCase(addProduct.fulfilled, (state, action) => {
                 state.products.push(action.payload)
+                showNotification("success", "Thêm mới thành công!")
+            })
+            .addCase(addProduct.rejected, () => {
+                showNotification("error", "Thêm mới không thành công!")
             })
             .addCase(updateProduct.fulfilled, (state, action) => {
                 state.products = state.products.map(item => {
@@ -86,9 +91,17 @@ const productsSlice = createSlice({
                     }
                     return item
                 })
+                showNotification("success", "Cập nhật thành công!")
+            })
+            .addCase(updateProduct.rejected, () => {
+                showNotification("error", "Cập nhật không thành công!")
             })
             .addCase(deleteProduct.fulfilled, (state, action) => {
                 state.products = state.products.filter(item => item.id !== action.payload)
+                showNotification("success", "Xóa thành công!")
+            })
+            .addCase(deleteProduct.rejected, () => {
+                showNotification("error", "Xóa không thành công!")
             })
     }
 })

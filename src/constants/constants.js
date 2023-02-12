@@ -8,6 +8,7 @@ export const ConstanthPaths = {
     PRODUCT_PRICE: "/san-pham/gia-tien/:price",
     PRODUCT_BRAND_PRICE: "/san-pham/hang-san-xuat/:brand_name?gia-tien=:price",
     PRODUCT_DETAIL: "/san-pham/:product_name",
+    ORDER: "/lich-su-mua-hang",
     ADMIN_SIGN_IN: "/quan-ly/sign-in",
     ADMIN_PRODUCT: "/quan-ly/san-pham",
     ADMIN_BRAND: "/quan-ly/hang-san-xuat",

@@ -28,15 +28,15 @@ const Header = () => {
         {
             key: '1',
             label: (
-                <div onClick={handleSignOut}>Đăng xuất</div>
+                <Link to={localStorage.getItem("isAdmin") === "1" ? ConstanthPaths.ADMIN_PRODUCT : ConstanthPaths.ORDER}>
+                    {localStorage.getItem("isAdmin") === "1" ? "Trang quản lý" : "Lịch sử mua hàng"}
+                </Link>
             ),
         },
         {
             key: '2',
             label: (
-                <Link to={localStorage.getItem("isAdmin") === "1" ? ConstanthPaths.ADMIN_PRODUCT : ConstanthPaths.PRODUCT_LIST}>
-                    {localStorage.getItem("isAdmin") === "1" ? "Trang quản lý" : "Lịch sử mua hàng"}
-                </Link>
+                <div onClick={handleSignOut}>Đăng xuất</div>
             ),
         }
     ]

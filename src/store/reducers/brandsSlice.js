@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axiosInstance from "../../requests/axiosInstance"
+import { showNotification } from "../../ultis/notification"
 
 export const getBrands = createAsyncThunk('brands/getBrands', async () => {
     const res = await axiosInstance.get('api/brand')
@@ -25,8 +26,6 @@ const brandsSlice = createSlice({
     name: 'brands',
     initialState: {
         brands: [],
-        severity: "info",
-        message: "",
     },
     extraReducers: (builder) => {
         builder
@@ -35,12 +34,10 @@ const brandsSlice = createSlice({
             })
             .addCase(addBrand.fulfilled, (state, action) => {
                 state.brands.push(action.payload)
-                state.severity = "success"
-                state.message = "Thêm mới thành công!"
+                showNotification("success", "Thêm mới thành công!")
             })
-            .addCase(addBrand.rejected, (state) => {
-                state.severity = "error"
-                state.message = "Thêm mới không thành công!"
+            .addCase(addBrand.rejected, () => {
+                showNotification("error", "Thêm mới không thành công!")
             })
             .addCase(updateBrand.fulfilled, (state, action) => {
                 state.brands = state.brands.map(item => {
@@ -49,21 +46,17 @@ const brandsSlice = createSlice({
                     }
                     return item
                 })
-                state.severity = "success"
-                state.message = "Cập nhật thành công!"
+                showNotification("success", "Cập nhật thành công!")
             })
-            .addCase(updateBrand.rejected, (state) => {
-                state.severity = "error"
-                state.message = "Cập nhật không thành công!"
+            .addCase(updateBrand.rejected, () => {
+                showNotification("error", "Cập nhật không thành công!")
             })
             .addCase(deleteBrand.fulfilled, (state, action) => {
                 state.brands = state.brands.filter(item => item.id !== action.payload)
-                state.status = "success"
-                state.message = "Xóa thành công!"
+                showNotification("success", "Xóa thành công!")
             })
-            .addCase(deleteBrand.rejected, (state) => {
-                state.status = "error"
-                state.message = "Xóa không thành công!"
+            .addCase(deleteBrand.rejected, () => {
+                showNotification("error", "Xóa không thành công!")
             })
     }
 })
