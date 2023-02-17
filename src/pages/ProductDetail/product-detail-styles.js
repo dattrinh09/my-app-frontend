@@ -29,6 +29,7 @@ export const PhotoContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #fff;
 `
 export const Photo = styled.img`
     height: 300px;
@@ -93,7 +94,7 @@ export const SubContent = styled.span`
 export const SubSection = styled.div`
     display: flex;
     flex-direction: column;
-    background: #eee;
+    background: #ddd;
     border-radius: 10px;
     padding: 20px;
     gap: 20px;

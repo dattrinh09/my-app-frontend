@@ -12,11 +12,11 @@ const { confirm } = Modal
 const Brands = () => {
     // Lấy dữ liệu
     const { brands } = useSelector(brandsSelector)
-    const distpatch = useDispatch()
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        distpatch(getBrands())
-    }, [distpatch])
+        dispatch(getBrands())
+    }, [dispatch])
 
     const data = brands.map(value => ({
         key: value.id,
@@ -33,7 +33,7 @@ const Brands = () => {
             .validateFields()
             .then(values => {
                 addForm.resetFields()
-                distpatch(addBrand(values))
+                dispatch(addBrand(values))
                 setOpen(false)
             })
             .catch(info => {
@@ -57,7 +57,7 @@ const Brands = () => {
             .validateFields()
             .then(values => {
                 editForm.resetFields()
-                distpatch(updateBrand({ id: selected.id, data: values }))
+                dispatch(updateBrand({ id: selected.id, data: values }))
                 setSelected()
             })
             .catch(info => {
@@ -72,7 +72,7 @@ const Brands = () => {
             okText: "Đồng ý",
             cancelText: "Hủy",
             onOk() {
-                distpatch(deleteBrand(id))
+                dispatch(deleteBrand(id))
             }
         })
     }

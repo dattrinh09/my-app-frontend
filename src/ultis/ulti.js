@@ -4,3 +4,9 @@ export const formatPrice = price => {
         currency: 'VND',
     })
 }
+
+export const formatDate = date => {
+    return (new Date(date)).toLocaleString('vn-VN', {
+        timeZone: 'UTC',
+    })
+}

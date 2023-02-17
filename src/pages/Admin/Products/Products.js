@@ -14,14 +14,14 @@ const { confirm } = Modal
 
 const Products = () => {
   // Lấy danh sách sản phẩm
-  const productsStore = useSelector(productsSelector)
+  const { products } = useSelector(productsSelector)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getProducts())
   }, [dispatch])
 
-  const data = productsStore.products.map(value => ({
+  const data = products.map(value => ({
     key: value.id,
     id: value.id,
     product_name: value.product_name,

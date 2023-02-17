@@ -1,11 +1,14 @@
 import { Button, Card, Form, Input, List, Modal, Pagination, Rate, Spin } from 'antd';
+import moment from 'moment/moment';
 import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
+import axiosInstance from '../../requests/axiosInstance';
 import { getProducts } from '../../store/reducers/productsSlice';
 import { productsSelector } from '../../store/selectors';
+import { showNotification } from '../../ultis/notification';
 import { getProducRoute, getProductByBrandRoute } from '../../ultis/route';
 import { formatPrice } from '../../ultis/ulti';
 import { Brand, ButtonContent, BuyButton, Com, Container, Content, Heading, Heading1, Info, Loader, Pagin, Photo, PhotoContainer, Price, Price1, Section, SubContent, SubHeading, SubSection } from './product-detail-styles'
@@ -65,18 +68,29 @@ const ProductDetail = () => {
 
     const handleOrder = () => {
         if (localStorage.getItem('token')) {
+            const res = axiosInstance.get('api/order/1')
+            console.log(res.data)
             setOpen(true)
         } else {
-            alert("Bạn chưa đăng nhập. Vui lòng đăng nhập!")
+            showNotification("error", "Please sign in before order product!")
         }
     }
 
     const handleSubmitOrder = () => {
         form
             .validateFields()
-            .then(values => {
+            .then(async values => {
                 form.resetFields()
-                console.log("order", values)
+                const newOrder = {
+                    user_id: Number(localStorage.getItem("userId")),
+                    product_id: selectedProduct.id,
+                    phone_number: values.orderPhone,
+                    address: values.orderAddress,
+                    order_time: moment().format()
+                }
+                console.log("order", newOrder)
+                const res = await axiosInstance.post("api/order", newOrder)
+                console.log(res.data)
                 setOpen(false)
             })
             .catch(info => {

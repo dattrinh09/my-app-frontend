@@ -11,6 +11,7 @@ import PrivateRoute from '../components/PrivateRoute/PrivateRoute'
 import Brands from '../pages/Admin/Brands/Brands'
 import ProductSearch from '../pages/ProductList/ProductSearch/ProductSearch'
 import Order from '../pages/Order/Order'
+import Orders from '../pages/Admin/Orders/Orders'
 
 const routes = () => {
   return (
@@ -29,6 +30,7 @@ const routes = () => {
       <Route element={<PrivateRoute />}>
         <Route path={ConstanthPaths.ADMIN_PRODUCT} element={<Products />} />
         <Route path={ConstanthPaths.ADMIN_BRAND} element={<Brands />} />
+        <Route path={ConstanthPaths.ADMIN_ORDER} element={<Orders />} />
       </Route>      
     </Routes>
   )
