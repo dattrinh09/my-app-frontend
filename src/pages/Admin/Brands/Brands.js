@@ -2,9 +2,7 @@ import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/ic
 import { Button, Form, Input, Modal, Space, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import AdminHeader from '../../../components/adminHeader/AdminHeader'
-import AdminNavigator from '../../../components/adminNavigator/AdminNavigator'
-import Notifi from '../../../components/notifi/Notifi'
+import AdminLayout from '../../../components/layout/AdminLayout'
 import { addBrand, deleteBrand, getBrands, updateBrand } from '../../../store/reducers/brandsSlice'
 import { brandsSelector } from '../../../store/selectors'
 import { AddButton, Container, Content } from './brands-styles'
@@ -12,15 +10,13 @@ import { AddButton, Container, Content } from './brands-styles'
 const { confirm } = Modal
 
 const Brands = () => {
-    // Thông báo
-    const [openMessage, setOpenMessage] = useState(false)
     // Lấy dữ liệu
-    const { brands, severity, message } = useSelector(brandsSelector)
-    const distpatch = useDispatch()
+    const { brands } = useSelector(brandsSelector)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        distpatch(getBrands())
-    }, [distpatch])
+        dispatch(getBrands())
+    }, [dispatch])
 
     const data = brands.map(value => ({
         key: value.id,
@@ -37,9 +33,8 @@ const Brands = () => {
             .validateFields()
             .then(values => {
                 addForm.resetFields()
-                distpatch(addBrand(values))
+                dispatch(addBrand(values))
                 setOpen(false)
-                setOpenMessage(true)
             })
             .catch(info => {
                 console.log("Validate Failed: ", info)
@@ -62,9 +57,8 @@ const Brands = () => {
             .validateFields()
             .then(values => {
                 editForm.resetFields()
-                distpatch(updateBrand({ id: selected.id, data: values }))
+                dispatch(updateBrand({ id: selected.id, data: values }))
                 setSelected()
-                setOpenMessage(true)
             })
             .catch(info => {
                 console.log("Validate Failed: ", info)
@@ -78,8 +72,7 @@ const Brands = () => {
             okText: "Đồng ý",
             cancelText: "Hủy",
             onOk() {
-                distpatch(deleteBrand(id))
-                setOpenMessage(true)
+                dispatch(deleteBrand(id))
             }
         })
     }
@@ -109,9 +102,7 @@ const Brands = () => {
     ]
 
     return (
-        <>
-            <AdminHeader />
-            <AdminNavigator />
+        <AdminLayout>
             <Container>
                 <Content>
                     <h2>Hãng sản xuất</h2>
@@ -181,16 +172,8 @@ const Brands = () => {
                         </Form>
                     </Modal>
                 </Content>
-                {openMessage &&
-                    <Notifi
-                        open={openMessage}
-                        severity={severity}
-                        message={message}
-                        onClose={() => setOpenMessage(false)}
-                    />
-                }
             </Container>
-        </>
+        </AdminLayout>
     )
 }
 

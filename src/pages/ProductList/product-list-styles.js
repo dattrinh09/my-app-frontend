@@ -26,12 +26,12 @@ export const Section = styled.div`
 export const Heading = styled.div`
     padding: 0 15px;
     border-radius: 10px;
-    background: #eee;
+    background: #ddd;
 `
 export const Sec = styled.div`
     padding-top: 30px;
     border-radius: 10px;
-    background: #eee;
+    background: #ddd;
 `
 export const Title = styled.h4`
     text-align: center;

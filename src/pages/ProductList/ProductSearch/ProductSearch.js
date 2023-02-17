@@ -2,8 +2,7 @@ import { Button, Card, List } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
-import Header from '../../../components/header/Header'
-import Navigator from '../../../components/navigator/Navigator'
+import MainLayout from '../../../components/layout/MainLayout'
 import { getSearchProducts } from '../../../store/reducers/productsSlice'
 import { productsSelector } from '../../../store/selectors'
 import { getProducRoute } from '../../../ultis/route'
@@ -17,10 +16,10 @@ const ProductSearch = () => {
     const [page, setPage] = useState(1)
     const [listProducts, setListProducts] = useState([])
 
-    
-  useEffect(() => {
-    setPage(1)
-  }, [params])
+
+    useEffect(() => {
+        setPage(1)
+    }, [params])
 
     useEffect(() => {
         dispatch(getSearchProducts({
@@ -31,15 +30,13 @@ const ProductSearch = () => {
     }, [dispatch, params, page])
 
     useEffect(() => {
-      if(page === 1) setListProducts(filterProducts)
-      else setListProducts([...listProducts, ...filterProducts])
+        if (page === 1) setListProducts(filterProducts)
+        else setListProducts([...listProducts, ...filterProducts])
     }, [filterProducts])
-  
+
 
     return (
-        <>
-            <Header />
-            <Navigator />
+        <MainLayout>
             <Container>
                 <Section>
                     <h2>Có {total} kết quả tìm kiếm cho từ khóa: "{params.keyword}"</h2>
@@ -52,7 +49,7 @@ const ProductSearch = () => {
                                     <Card
                                         hoverable
                                         style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
-                                        cover={<img alt='photo' src={item.url} style={{ width: '120px', height: '120px', paddingTop: '20px' }} />}
+                                        cover={<img alt='phone' src={item.url} style={{ width: '120px', height: '120px', paddingTop: '20px' }} />}
                                     >
                                         <Sec>
                                             <Title>{item.product_name}</Title>
@@ -68,7 +65,7 @@ const ProductSearch = () => {
                     </SubSec>
                 </Section>
             </Container>
-        </>
+        </MainLayout>
     )
 }
 

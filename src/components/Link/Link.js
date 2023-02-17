@@ -1,8 +1,8 @@
 import React from 'react'
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const LinkContainer = styled(NavLink)`
+const LinkContainer = styled(Link)`
     color: ${props => props.color};
     font-size: ${props => props.size ? props.size : "14px"};
     font-weight: 700; 

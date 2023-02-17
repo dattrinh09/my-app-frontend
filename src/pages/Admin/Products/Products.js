@@ -1,8 +1,6 @@
 import { Button, Space, Table, Tag, Input, Modal } from 'antd'
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, SearchOutlined } from '@ant-design/icons'
 import React, { useEffect, useRef, useState } from 'react'
-import AdminHeader from '../../../components/adminHeader/AdminHeader'
-import AdminNavigator from '../../../components/adminNavigator/AdminNavigator'
 import { AddButton, Container, Content, ProductImg } from './products-styles'
 import AddForm from './AddForm'
 import EditForm from './EditForm'
@@ -10,19 +8,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { productsSelector } from '../../../store/selectors'
 import { deleteProduct, getProducts } from '../../../store/reducers/productsSlice'
 import { formatPrice } from '../../../ultis/ulti'
+import AdminLayout from '../../../components/layout/AdminLayout'
 
 const { confirm } = Modal
 
 const Products = () => {
   // Lấy danh sách sản phẩm
-  const productsStore = useSelector(productsSelector)
+  const { products } = useSelector(productsSelector)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getProducts())
   }, [dispatch])
 
-  const data = productsStore.products.map(value => ({
+  const data = products.map(value => ({
     key: value.id,
     id: value.id,
     product_name: value.product_name,
@@ -161,9 +160,7 @@ const Products = () => {
   ]
 
   return (
-    <>
-      <AdminHeader />
-      <AdminNavigator />
+    <AdminLayout>
       <Container>
         <Content>
           <h2>Sản phẩm</h2>
@@ -182,7 +179,7 @@ const Products = () => {
           {selected && <EditForm product={selected} handleClose={() => setSelected()} />}
         </Content>
       </Container>
-    </>
+    </AdminLayout>
   )
 }
 

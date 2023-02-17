@@ -26,7 +26,7 @@ export const Item = styled.div`
 export const BrandMenu = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    width: 210px;
+    width: 300px;
     height: 80px;
     text-align: center;
 `

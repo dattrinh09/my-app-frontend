@@ -2,9 +2,8 @@ import { Card, List } from 'antd';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Header from '../../components/header/Header';
+import MainLayout from '../../components/layout/MainLayout';
 import MyLink from '../../components/Link/Link';
-import Navigator from '../../components/navigator/Navigator';
 import { ConstanthPaths } from '../../constants/constants';
 import { getFilterProducts } from '../../store/reducers/productsSlice';
 import { productsSelector } from '../../store/selectors';
@@ -26,9 +25,7 @@ const HomePage = () => {
   }, [dispatch])
 
   return (
-    <>
-      <Header />
-      <Navigator />
+    <MainLayout>
       <Container>
         <Section>
           <h2>Sản phẩm</h2>
@@ -44,7 +41,7 @@ const HomePage = () => {
                   <Card
                     hoverable
                     style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
-                    cover={<img alt='photo' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
+                    cover={<img alt='phone' src={item.url} style={{ width: '120px', paddingTop: '20px' }} />}
                   >
                     <Sec>
                       <Title>{item.product_name}</Title>
@@ -57,7 +54,7 @@ const HomePage = () => {
           />
         </Section>
       </Container>
-    </>
+    </MainLayout>
   )
 }
 

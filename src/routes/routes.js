@@ -7,9 +7,11 @@ import HomePage from '../pages/HomePage/HomePage'
 import ProductDetail from '../pages/ProductDetail/ProductDetail'
 import ProductList from '../pages/ProductList/ProductList'
 import Products from '../pages/Admin/Products/Products'
-import PrivateRoute from '../components/privateRoute/PrivateRoute'
+import PrivateRoute from '../components/PrivateRoute/PrivateRoute'
 import Brands from '../pages/Admin/Brands/Brands'
 import ProductSearch from '../pages/ProductList/ProductSearch/ProductSearch'
+import Order from '../pages/Order/Order'
+import Orders from '../pages/Admin/Orders/Orders'
 
 const routes = () => {
   return (
@@ -20,13 +22,15 @@ const routes = () => {
       <Route path={ConstanthPaths.PRODUCT_LIST} element={<ProductList />} />
       <Route path={ConstanthPaths.PRODUCT_BRAND} element={<ProductList />} />
       <Route path={ConstanthPaths.PRODUCT_PRICE} element={<ProductList />} />
+      <Route path={ConstanthPaths.PRODUCT_BRAND_PRICE} element={<ProductList />} />
       <Route path={ConstanthPaths.PRODUCT_SEARCH} element={<ProductSearch />} />
       <Route path={ConstanthPaths.PRODUCT_DETAIL} element={<ProductDetail />} />
-      <Route path={ConstanthPaths.PRODUCT_BRAND_PRICE} element={<ProductList />} />
+      <Route path={ConstanthPaths.ORDER} element={<Order />} />
       <Route path={ConstanthPaths.ADMIN_SIGN_IN} element={<SignIn />} />
       <Route element={<PrivateRoute />}>
         <Route path={ConstanthPaths.ADMIN_PRODUCT} element={<Products />} />
         <Route path={ConstanthPaths.ADMIN_BRAND} element={<Brands />} />
+        <Route path={ConstanthPaths.ADMIN_ORDER} element={<Orders />} />
       </Route>      
     </Routes>
   )

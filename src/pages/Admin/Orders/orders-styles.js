@@ -14,8 +14,3 @@ export const Content = styled.div`
 export const ProductImg = styled.img`
     width: 70px;
 `
-
-export const AddButton = styled.div`
-    width: 250px;
-    margin: 0 auto;
-`

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button, Form, Input } from 'antd'
 import { ConstanthPaths } from '../../constants/constants'
 import axiosInstance from '../../requests/axiosInstance'
@@ -7,42 +7,32 @@ import { FormContainer, FormHeading } from './form-styles'
 
 const formItemLayout = {
   labelCol: {
-      xs: {
-          span: 24,
-      },
-      sm: {
-          span: 7,
-      },
-  },
-  wrapperCol: {
-      xs: {
-          span: 24,
-      },
-      sm: {
-          span: 17,
-      },
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 7,
+    },
   },
 }
 
 const SignUp = () => {
-  const [form] = Form.useForm();
   const [error, setError] = useState("")
   const navigate = useNavigate()
 
   const handleFinish = async values => {
-    try{
+    try {
       const body = {
-          username: values.name,
-          email: values.email,
-          password: values.password,
+        username: values.name,
+        email: values.email,
+        password: values.password,
       }
       await axiosInstance.post('api/auth/signup', body)
       navigate(ConstanthPaths.SIGN_IN)
-  }catch (e) {
-      console.log(e.response.status)
+    } catch (e) {
       setError('E-mail đã được sử dụng!')
       throw new Error(e)
-  }
+    }
   }
 
   return (
@@ -52,13 +42,9 @@ const SignUp = () => {
       </FormHeading>
       <Form
         {...formItemLayout}
-        form={form}
         name="register"
         onFinish={handleFinish}
-        initialValues={{
-          residence: ['zhejiang', 'hangzhou', 'xihu'],
-          prefix: '86',
-        }}
+        onFocus={() => setError("")}
         scrollToFirstError
       >
         <Form.Item
@@ -128,24 +114,16 @@ const SignUp = () => {
           <Input.Password />
         </Form.Item>
         {error && <span style={{ color: 'red' }}>{error}</span>}
-        <br />
-        <span>Nếu bạn đã có tài khoản hãy nhấn vào
-          <NavLink
-            style={{ color: "blue" }}
-            to={ConstanthPaths.SIGN_IN}
-          > đây.
-          </NavLink>
-        </span>
-        <div>
+        <Form.Item>Nếu bạn đã có tài khoản. Nhấn vào <Link to={ConstanthPaths.SIGN_IN}>đây.</Link></Form.Item>
+        <Form.Item>
           <Button
-            className="form-btn"
             type='primary'
             htmlType="submit"
-            style={{ margin: "20px 0" }}
+            style={{ width: "100px" }}
           >
             Đăng ký
           </Button>
-        </div>
+        </Form.Item>
       </Form>
     </FormContainer>
   )
