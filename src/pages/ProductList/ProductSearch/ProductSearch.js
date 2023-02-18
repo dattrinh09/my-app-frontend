@@ -14,8 +14,6 @@ const ProductSearch = () => {
     const { filterProducts, total } = useSelector(productsSelector)
     const dispatch = useDispatch()
     const [page, setPage] = useState(1)
-    const [listProducts, setListProducts] = useState([])
-
 
     useEffect(() => {
         setPage(1)
@@ -29,12 +27,6 @@ const ProductSearch = () => {
         }))
     }, [dispatch, params, page])
 
-    useEffect(() => {
-        if (page === 1) setListProducts(filterProducts)
-        else setListProducts([...listProducts, ...filterProducts])
-    }, [filterProducts])
-
-
     return (
         <MainLayout>
             <Container>
@@ -42,7 +34,7 @@ const ProductSearch = () => {
                     <h2>Có {total} kết quả tìm kiếm cho từ khóa: "{params.keyword}"</h2>
                     <List
                         grid={{ column: 4 }}
-                        dataSource={listProducts}
+                        dataSource={filterProducts}
                         renderItem={item => (
                             <List.Item>
                                 <Link key={item.id} to={getProducRoute(item.product_name)}>
@@ -61,7 +53,7 @@ const ProductSearch = () => {
                         )}
                     />
                     <SubSec>
-                        {listProducts.length < total && <Button size="large" onClick={() => setPage(page + 1)}>Xem thêm</Button>}
+                        {filterProducts.length < total && <Button size="large" onClick={() => setPage(page + 1)}>Xem thêm</Button>}
                     </SubSec>
                 </Section>
             </Container>

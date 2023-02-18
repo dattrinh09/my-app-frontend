@@ -9,9 +9,9 @@ const AdminHeader = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem("token")
-    localStorage.removeItem("userName")
-    localStorage.removeItem("userEmail")
-    localStorage.removeItem("isAdmin")
+    localStorage.removeItem("username")
+    localStorage.removeItem("email")
+    localStorage.removeItem("is_admin")
     navigate(ConstanthPaths.HOME_PAGE)
   }
 

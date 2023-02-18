@@ -18,15 +18,14 @@ const SignIn = () => {
       }
       const res = await axiosInstance.post("api/auth/signin", body)
       localStorage.setItem("token", res.data.access_token)
-      localStorage.setItem("userId", res.data.user_info.id)
-      localStorage.setItem("userName", res.data.user_info.username)
-      localStorage.setItem("userEmail", res.data.user_info.email)
+      localStorage.setItem("user_id", res.data.user_info.id)
+      localStorage.setItem("username", res.data.user_info.username)
+      localStorage.setItem("email", res.data.user_info.email)
+      localStorage.setItem("is_admin", res.data.user_info.is_admin)
       if (res.data.user_info.is_admin) {
-        localStorage.setItem("isAdmin", "1")
         navigate(ConstanthPaths.ADMIN_PRODUCT)
       }
       else {
-        localStorage.setItem("isAdmin", "2")
         navigate(ConstanthPaths.HOME_PAGE)
       }
     } catch (e) {

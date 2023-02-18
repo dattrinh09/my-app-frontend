@@ -1,5 +1,4 @@
 import { Button, Card, Form, Input, List, Modal, Pagination, Rate, Spin } from 'antd';
-import moment from 'moment/moment';
 import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
 import axiosInstance from '../../requests/axiosInstance';
 import { getProducts } from '../../store/reducers/productsSlice';
-import { productsSelector } from '../../store/selectors';
+import { productsSelector} from '../../store/selectors';
 import { showNotification } from '../../ultis/notification';
 import { getProducRoute, getProductByBrandRoute } from '../../ultis/route';
 import { formatPrice } from '../../ultis/ulti';
@@ -67,12 +66,10 @@ const ProductDetail = () => {
     }
 
     const handleOrder = () => {
-        if (localStorage.getItem('token')) {
-            const res = axiosInstance.get('api/order/1')
-            console.log(res.data)
+        if (localStorage.getItem("token")) {
             setOpen(true)
         } else {
-            showNotification("error", "Please sign in before order product!")
+            showNotification("error", "Bạn chưa đăng nhập! Vui lòng đăng nhập trước khi mua hàng.")
         }
     }
 
@@ -82,13 +79,11 @@ const ProductDetail = () => {
             .then(async values => {
                 form.resetFields()
                 const newOrder = {
-                    user_id: Number(localStorage.getItem("userId")),
+                    user_id: Number(localStorage.getItem("user_id")),
                     product_id: selectedProduct.id,
                     phone_number: values.orderPhone,
                     address: values.orderAddress,
-                    order_time: moment().format()
                 }
-                console.log("order", newOrder)
                 const res = await axiosInstance.post("api/order", newOrder)
                 console.log(res.data)
                 setOpen(false)

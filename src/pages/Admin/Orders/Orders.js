@@ -1,10 +1,10 @@
-import { DeleteOutlined } from '@ant-design/icons'
-import { Button, Modal, Space, Table } from 'antd'
-import React from 'react'
-import { useEffect } from 'react'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { Button, Form, Modal, Select, Space, Table, Tag } from 'antd'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AdminLayout from '../../../components/layout/AdminLayout'
-import { deleteOrder, getAllOrders } from '../../../store/reducers/ordersSlice'
+import { OrderStatus } from '../../../constants/constants'
+import { deleteOrder, getAllOrders, updateOrder } from '../../../store/reducers/ordersSlice'
 import { ordersSelector } from '../../../store/selectors'
 import { formatDate, formatPrice } from '../../../ultis/ulti'
 import { Container, Content, ProductImg } from './orders-styles'
@@ -14,6 +14,8 @@ const { confirm } = Modal
 const Orders = () => {
   const { orders } = useSelector(ordersSelector)
   const dispatch = useDispatch()
+  const [selected, setSelected] = useState()
+  const [editForm] = Form.useForm()
 
   useEffect(() => {
     dispatch(getAllOrders())
@@ -28,8 +30,30 @@ const Orders = () => {
     total: formatPrice(value.total),
     phone_number: value.phone_number,
     address: value.address,
-    order_time: formatDate(value.order_time)
+    order_time: formatDate(value.order_time),
+    status: value.status
   }))
+
+  const handleEdit = (item) => {
+    editForm.setFieldsValue({
+      status: OrderStatus[item.status].title
+    })
+    setSelected(item)
+  }
+
+  const handleUpdate = () => {
+    editForm
+      .validateFields()
+      .then(values => {
+        editForm.resetFields()
+        const data = OrderStatus.find(item => item.title === values.status)
+        dispatch(updateOrder({id: selected.id, data: {status: data.value}}))
+        setSelected()
+      })
+      .catch(info => {
+        console.log("Validate Failed: ", info)
+      })
+  }
 
   const handleDelete = (id) => {
     confirm({
@@ -65,7 +89,7 @@ const Orders = () => {
       render: (url) => <ProductImg src={url} />
     },
     {
-      title: "Giá",
+      title: "Giá tiền",
       dataIndex: "total",
       key: "total"
     },
@@ -85,11 +109,18 @@ const Orders = () => {
       key: "order_time",
     },
     {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => <Tag size="" color={OrderStatus[status].color}>{OrderStatus[status].title}</Tag>
+    },
+    {
       title: "Hành động",
       key: "actions",
-      render: ({ id }) => (
+      render: (item) => (
         <Space size="middle">
-          <Button icon={<DeleteOutlined />} danger onClick={() => handleDelete(id)}>Xóa</Button>
+          <Button icon={<EditOutlined />} onClick={() => handleEdit(item)}>Cập nhật</Button>
+          <Button icon={<DeleteOutlined />} danger onClick={() => handleDelete(item.id)}>Xóa</Button>
         </Space>
       )
     }
@@ -101,6 +132,39 @@ const Orders = () => {
         <Content>
           <h2>Đơn hàng</h2>
           <Table columns={columns} dataSource={data} />
+          <Modal
+            title="Cập nhật trạng thái đơn hàng"
+            open={!!selected}
+            okText="Cập nhật"
+            cancelText="Hủy"
+            onCancel={() => setSelected()}
+            onOk={handleUpdate}
+          >
+            <Form
+              form={editForm}
+              layout="vertical"
+              name="edit_form"
+            >
+              <Form.Item
+                name="status"
+                label="Trạng thái"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy lựa chọn trạng thái của đơn hàng!"
+                  }
+                ]}
+              >
+                <Select
+                  allowClear
+                >
+                  {OrderStatus.map(item => (
+                    <Select.Option key={item.key} value={item.title}>{item.title}</Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Form>
+          </Modal>
         </Content>
       </Container>
     </AdminLayout>

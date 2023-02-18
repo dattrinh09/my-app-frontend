@@ -44,3 +44,30 @@ export const FilterPrice = [
         label: 'Trên 14 triệu'
     }
 ]
+
+export const OrderStatus = [
+    {
+        key: '0',
+        color: 'yellow',
+        value: 0,
+        title: 'Chờ xác nhận'
+    },
+    {
+        key: '1',
+        color: 'blue',
+        value: 1,
+        title: 'Đang giao'
+    },
+    {
+        key: '2',
+        color: 'green',
+        value: 2,
+        title: 'Đã giao'
+    },
+    {
+        key: '3',
+        color: 'red',
+        value: 3,
+        title: 'Đã hủy'
+    }
+]
