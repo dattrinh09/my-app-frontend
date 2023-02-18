@@ -12,21 +12,22 @@ export const getFilterProducts = createAsyncThunk('products/getFilterProducts', 
         page: filters.page,
         per_page: filters.perPage,
     }
-    if(filters.brandName !== "ALL") params.brand_name = filters.brandName
-    if(filters.price !== "ALL") {
+    if (filters.brandName !== "ALL") params.brand_name = filters.brandName
+    if (filters.price !== "ALL") {
         const prices = filters.price.split("-")
-        if(prices[0] === "duoi") params.high = prices[1]
+        if (prices[0] === "duoi") params.high = prices[1]
         else if (prices[0] === "tren") params.low = prices[1]
         else {
             params.low = prices[0]
             params.high = prices[1]
-        } 
+        }
     }
     const res = await axiosInstance.get('api/product/page', { params: params })
     return {
+        page: filters.page,
         products: res.data.products,
         total: res.data.total
-    } 
+    }
 })
 
 export const getSearchProducts = createAsyncThunk('products/getSearchProducts', async filters => {
@@ -37,9 +38,10 @@ export const getSearchProducts = createAsyncThunk('products/getSearchProducts', 
     }
     const res = await axiosInstance.get('api/product/search', { params: params })
     return {
+        page: filters.page,
         products: res.data.products,
         total: res.data.total
-    } 
+    }
 })
 
 export const addProduct = createAsyncThunk('products/addProduct', async newProduct => {
@@ -70,11 +72,15 @@ const productsSlice = createSlice({
                 state.products = action.payload
             })
             .addCase(getFilterProducts.fulfilled, (state, action) => {
-                state.filterProducts = action.payload.products
+                state.filterProducts = action.payload.page === 1
+                    ? action.payload.products
+                    : state.filterProducts.concat(action.payload.products)
                 state.total = action.payload.total
             })
             .addCase(getSearchProducts.fulfilled, (state, action) => {
-                state.filterProducts = action.payload.products
+                state.filterProducts = action.payload.page === 1
+                    ? action.payload.products
+                    : state.filterProducts.concat(action.payload.products)
                 state.total = action.payload.total
             })
             .addCase(addProduct.fulfilled, (state, action) => {
@@ -86,7 +92,7 @@ const productsSlice = createSlice({
             })
             .addCase(updateProduct.fulfilled, (state, action) => {
                 state.products = state.products.map(item => {
-                    if(item.id === action.payload.id) {
+                    if (item.id === action.payload.id) {
                         item = action.payload
                     }
                     return item

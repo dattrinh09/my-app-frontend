@@ -7,6 +7,11 @@ export const getAllOrders = createAsyncThunk('orders/getAllOrders', async () => 
     return res.data
 })
 
+export const updateOrder = createAsyncThunk('orders/updateOrder', async order => {
+    const res = await axiosInstance.patch(`api/order/${order.id}`, order.data)
+    return res.data
+})
+
 export const deleteOrder = createAsyncThunk('orders/deleteOrder', async id => {
     await axiosInstance.delete(`api/order/${id}`)
     return id
@@ -26,6 +31,15 @@ const ordersSlice = createSlice({
             .addCase(deleteOrder.fulfilled, (state, action) => {
                 state.orders = state.orders.filter(item => item.id !== action.payload)
                 showNotification("success", "Xoá thành công!")
+            })
+            .addCase(updateOrder.fulfilled, (state, action) => {
+                state.orders = state.orders.map(item => {
+                    if (item.id === action.payload.id) {
+                        item = action.payload
+                    }
+                    return item
+                })
+                showNotification("success", "Cập nhật thành công!")
             })
             .addCase(deleteOrder.rejected, () => {
                 showNotification("error", "Xóa không thành công!")

@@ -17,7 +17,6 @@ const ProductList = () => {
   const navigate = useNavigate()
 
   const { filterProducts, total } = useSelector(productsSelector)
-  const [listProducts, setListProducts] = useState([])
   const [page, setPage] = useState(1)
   const { brands } = useSelector(brandsSelector)
   const dispath = useDispatch()
@@ -43,11 +42,6 @@ const ProductList = () => {
       price: price
     }))
   }, [dispath, page, brand, price])
-
-  useEffect(() => {
-    if (page === 1) setListProducts(filterProducts)
-    else setListProducts([...listProducts, ...filterProducts])
-  }, [filterProducts])
 
   const handleChangeBrand = e => {
     const value = e.target.value
@@ -118,8 +112,7 @@ const ProductList = () => {
             <Sec>
               <List
                 grid={{ column: 3 }}
-                loading={!listProducts}
-                dataSource={listProducts}
+                dataSource={filterProducts}
                 renderItem={item => (
                   <List.Item>
                     <Link key={item.id} to={getProducRoute(item.product_name)}>
@@ -138,7 +131,7 @@ const ProductList = () => {
                 )}
               />
               <Pagin>
-                {listProducts.length < total && <Button size="large" onClick={() => setPage(page + 1)}>Xem thêm</Button>}
+                {filterProducts.length < total && <Button size="large" onClick={() => setPage(page + 1)}>Xem thêm</Button>}
               </Pagin>
             </Sec>
           </Section>

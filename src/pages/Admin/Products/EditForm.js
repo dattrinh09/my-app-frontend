@@ -15,7 +15,7 @@ const EditForm = ({ product, handleClose }) => {
             in_stock: product.in_stock,
             url: product.url
         })
-    }, [product])
+    }, [product, editForm])
 
     const handleUpdate = () => {
         editForm

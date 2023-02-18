@@ -13,7 +13,7 @@ import ProductSearch from '../pages/ProductList/ProductSearch/ProductSearch'
 import Order from '../pages/Order/Order'
 import Orders from '../pages/Admin/Orders/Orders'
 
-const routes = () => {
+const MyRoutes = () => {
   return (
     <Routes>
       <Route path={ConstanthPaths.HOME_PAGE} element={<HomePage />} index />
@@ -31,9 +31,9 @@ const routes = () => {
         <Route path={ConstanthPaths.ADMIN_PRODUCT} element={<Products />} />
         <Route path={ConstanthPaths.ADMIN_BRAND} element={<Brands />} />
         <Route path={ConstanthPaths.ADMIN_ORDER} element={<Orders />} />
-      </Route>      
+      </Route>
     </Routes>
   )
 }
 
-export default routes
+export default MyRoutes
