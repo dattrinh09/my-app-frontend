@@ -5,10 +5,9 @@ export const Container = styled.div`
     margin: 0 auto;
 `
 export const Content = styled.div`
-    padding: 20px 0;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    padding-bottom: 20px;
 `
 
 export const ProductImg = styled.img`
@@ -18,4 +17,5 @@ export const ProductImg = styled.img`
 export const AddButton = styled.div`
     width: 250px;
     margin: 0 auto;
+    margin-bottom: 20px;
 `

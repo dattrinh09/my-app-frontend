@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
-import axiosInstance from '../../requests/axiosInstance';
-import { getProducts } from '../../store/reducers/productsSlice';
-import { productsSelector} from '../../store/selectors';
+import { createOrder } from '../../store/reducers/ordersSlice';
+import { getProductByName, getProducts } from '../../store/reducers/productsSlice';
+import { productsSelector } from '../../store/selectors';
 import { showNotification } from '../../ultis/notification';
 import { getProducRoute, getProductByBrandRoute } from '../../ultis/route';
 import { formatPrice } from '../../ultis/ulti';
@@ -29,20 +29,16 @@ for (var j = 0; j < 100; j++) {
 
 const ProductDetail = () => {
     const params = useParams()
-    const { products } = useSelector(productsSelector)
+    const { products, selectedProduct } = useSelector(productsSelector)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getProducts())
-    }, [dispatch])
-
-    const productName = useMemo(() => {
-        return params.product_name
-    }, [params])
-
-    const selectedProduct = useMemo(() => {
-        return products.find(item => item.product_name.replaceAll(" ", "-") === productName)
-    }, [products, productName])
+        if(params.product_name) {
+            const productName = params.product_name.replaceAll("-", " ")
+            dispatch(getProductByName(productName))
+        }
+    }, [dispatch, params])
 
     const relatedProducts = useMemo(() => {
         return selectedProduct ? products.filter(item =>
@@ -69,7 +65,7 @@ const ProductDetail = () => {
         if (localStorage.getItem("token")) {
             setOpen(true)
         } else {
-            showNotification("error", "Bạn chưa đăng nhập! Vui lòng đăng nhập trước khi mua hàng.")
+            showNotification("error", "Bạn chưa đăng nhập!", "Vui lòng đăng nhập trước khi mua hàng.")
         }
     }
 
@@ -84,8 +80,7 @@ const ProductDetail = () => {
                     phone_number: values.orderPhone,
                     address: values.orderAddress,
                 }
-                const res = await axiosInstance.post("api/order", newOrder)
-                console.log(res.data)
+                dispatch(createOrder(newOrder))
                 setOpen(false)
             })
             .catch(info => {

@@ -13,7 +13,6 @@ export const ConstanthPaths = {
     ADMIN_PRODUCT: "/quan-ly/san-pham",
     ADMIN_BRAND: "/quan-ly/hang-san-xuat",
     ADMIN_USER: "/quan-ly/nguoi-dung",
-    ADMIN_COMMENT: "/quan-ly/binh-luan",
     ADMIN_ORDER: "/quan-ly/don-hang",
 };
 
@@ -48,7 +47,7 @@ export const FilterPrice = [
 export const OrderStatus = [
     {
         key: '0',
-        color: 'yellow',
+        color: 'orange',
         value: 0,
         title: 'Chờ xác nhận'
     },
@@ -62,7 +61,7 @@ export const OrderStatus = [
         key: '2',
         color: 'green',
         value: 2,
-        title: 'Đã giao'
+        title: 'Đã nhận'
     },
     {
         key: '3',

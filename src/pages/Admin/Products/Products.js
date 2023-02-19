@@ -9,6 +9,7 @@ import { productsSelector } from '../../../store/selectors'
 import { deleteProduct, getProducts } from '../../../store/reducers/productsSlice'
 import { formatPrice } from '../../../ultis/ulti'
 import AdminLayout from '../../../components/layout/AdminLayout'
+import { useMemo } from 'react'
 
 const { confirm } = Modal
 
@@ -21,16 +22,18 @@ const Products = () => {
     dispatch(getProducts())
   }, [dispatch])
 
-  const data = products.map(value => ({
-    key: value.id,
-    id: value.id,
-    product_name: value.product_name,
-    price: value.price,
-    in_stock: value.in_stock,
-    brand_name: value.brand.brand_name,
-    description: value.description,
-    url: value.url
-  }))
+  const data = useMemo(() => {
+    return products.map(value => ({
+      key: value.id,
+      id: value.id,
+      product_name: value.product_name,
+      price: value.price,
+      in_stock: value.in_stock,
+      brand_name: value.brand.brand_name,
+      description: value.description,
+      url: value.url
+    }))
+  }, [products])
 
   // Thêm sản phẩm
   const [open, setOpen] = useState(false)
@@ -41,7 +44,8 @@ const Products = () => {
   // Xóa sản phẩm
   const handleDelete = (id) => {
     confirm({
-      content: "Bạn muốn xóa sản phẩm này khỏi cơ sở dữ liệu?",
+      title: "Bạn muốn xóa sản phẩm này?",
+      content: "Bạn sẽ xóa luôn những đơn hàng của sản phẩm này!",
       okText: "Đồng ý",
       cancelText: "Hủy",
       onOk() {

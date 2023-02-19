@@ -1,13 +1,13 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Button, Form, Modal, Select, Space, Table, Tag } from 'antd'
-import React, { useState, useEffect } from 'react'
+import { Button, Form, Modal, Radio, Select, Space, Table, Tag } from 'antd'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AdminLayout from '../../../components/layout/AdminLayout'
 import { OrderStatus } from '../../../constants/constants'
-import { deleteOrder, getAllOrders, updateOrder } from '../../../store/reducers/ordersSlice'
+import { deleteOrder, getOrders, updateOrder } from '../../../store/reducers/ordersSlice'
 import { ordersSelector } from '../../../store/selectors'
 import { formatDate, formatPrice } from '../../../ultis/ulti'
-import { Container, Content, ProductImg } from './orders-styles'
+import { Container, Content, Control, ProductImg } from './orders-styles'
 
 const { confirm } = Modal
 
@@ -16,23 +16,27 @@ const Orders = () => {
   const dispatch = useDispatch()
   const [selected, setSelected] = useState()
   const [editForm] = Form.useForm()
+  const [status, setStatus] = useState(4)
 
   useEffect(() => {
-    dispatch(getAllOrders())
+    dispatch(getOrders())
   }, [dispatch])
 
-  const data = orders.map(value => ({
-    key: value.id,
-    id: value.id,
-    username: value.user.username,
-    product_name: value.product.product_name,
-    url: value.product.url,
-    total: formatPrice(value.total),
-    phone_number: value.phone_number,
-    address: value.address,
-    order_time: formatDate(value.order_time),
-    status: value.status
-  }))
+  const data = useMemo(() => {
+    const list = status === 4 ? orders : orders.filter(item => item.status === status)
+    return list.map(value => ({
+      key: value.id,
+      id: value.id,
+      username: value.user.username,
+      product_name: value.product.product_name,
+      url: value.product.url,
+      total: formatPrice(value.total),
+      phone_number: value.phone_number,
+      address: value.address,
+      order_time: formatDate(value.order_time),
+      status: value.status
+    }))
+  }, [orders, status])
 
   const handleEdit = (item) => {
     editForm.setFieldsValue({
@@ -47,7 +51,7 @@ const Orders = () => {
       .then(values => {
         editForm.resetFields()
         const data = OrderStatus.find(item => item.title === values.status)
-        dispatch(updateOrder({id: selected.id, data: {status: data.value}}))
+        dispatch(updateOrder({ id: selected.id, data: { status: data.value } }))
         setSelected()
       })
       .catch(info => {
@@ -57,7 +61,8 @@ const Orders = () => {
 
   const handleDelete = (id) => {
     confirm({
-      content: "Bạn muốn xóa đơn hàng này khỏi cơ sở dữ liệu? Số lượng sản phẩm tương ứng sẽ được khôi phục!",
+      title: "Bạn muốn xóa đơn hàng này?",
+      content: "Số lượng sản phẩm tương ứng sẽ được khôi phục!",
       okText: "Đồng ý",
       cancelText: "Hủy",
       onOk() {
@@ -131,6 +136,21 @@ const Orders = () => {
       <Container>
         <Content>
           <h2>Đơn hàng</h2>
+          <Control>
+            <Radio.Group
+              value={status}
+              buttonStyle="solid"
+              size="large"
+              onChange={e => setStatus(e.target.value)}
+            >
+              <Radio.Button value={4}>Tất cả</Radio.Button>
+              {OrderStatus.map(item => (
+                <Radio.Button key={item.key} value={item.value}>
+                  {item.title}
+                </Radio.Button>
+              ))}
+            </Radio.Group>
+          </Control>
           <Table columns={columns} dataSource={data} />
           <Modal
             title="Cập nhật trạng thái đơn hàng"

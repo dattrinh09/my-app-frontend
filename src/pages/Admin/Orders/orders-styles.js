@@ -5,10 +5,13 @@ export const Container = styled.div`
     margin: 0 auto;
 `
 export const Content = styled.div`
-    padding: 20px 0;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+`
+
+export const Control = styled.div`
+    text-align: center;
+    margin-bottom: 20px;
 `
 
 export const ProductImg = styled.img`

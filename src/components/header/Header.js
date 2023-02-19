@@ -28,8 +28,8 @@ const Header = () => {
         {
             key: '1',
             label: (
-                <Link to={localStorage.getItem("is_admin") === true ? ConstanthPaths.ADMIN_PRODUCT : ConstanthPaths.ORDER}>
-                    {localStorage.getItem("is_admin") === true ? "Trang quản lý" : "Lịch sử mua hàng"}
+                <Link to={localStorage.getItem("is_admin") === "true" ? ConstanthPaths.ADMIN_PRODUCT : ConstanthPaths.ORDER}>
+                    {localStorage.getItem("is_admin") === "true" ? "Trang quản lý" : "Lịch sử mua hàng"}
                 </Link>
             ),
         },

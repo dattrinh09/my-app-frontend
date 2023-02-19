@@ -7,4 +7,5 @@ export const LayoutContainer = styled.div`
 `
 
 export const Content = styled.div`
+    min-height: 540px;
 `
