@@ -17,5 +17,5 @@ export const getProductByBrandAndPriceRoute = (brand_name, price) => {
 }
 
 export const getProductBySearch = (keyword) => {
-    return ConstanthPaths.PRODUCT_SEARCH.replace(":keyword", keyword)
+    return ConstanthPaths.PRODUCT_SEARCH.replace(":keyword", keyword.replaceAll(" ","-"))
 }

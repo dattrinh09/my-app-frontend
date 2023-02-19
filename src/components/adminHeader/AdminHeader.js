@@ -9,6 +9,7 @@ const AdminHeader = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem("token")
+    localStorage.removeItem("user_id")
     localStorage.removeItem("username")
     localStorage.removeItem("email")
     localStorage.removeItem("is_admin")

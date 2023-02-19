@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { updateProduct } from '../../../store/reducers/productsSlice'
 
-const EditForm = ({ product, handleClose }) => {
+const EditForm = ({ product, onClose }) => {
     const dispatch = useDispatch()
     const [editForm] = Form.useForm()
 
@@ -28,7 +28,7 @@ const EditForm = ({ product, handleClose }) => {
                     in_stock: Number(values.in_stock)
                 }
                 dispatch(updateProduct({id: product.id, data: newProduct}))
-                handleClose()
+                onClose()
             })
             .catch(info => {
                 console.log("Validate Failed: ", info)
@@ -41,7 +41,7 @@ const EditForm = ({ product, handleClose }) => {
             open={!!product.id}
             okText="Cập nhật"
             cancelText="Hủy"
-            onCancel={handleClose}
+            onCancel={onClose}
             onOk={handleUpdate}
         >
             <Form

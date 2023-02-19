@@ -178,9 +178,9 @@ const Products = () => {
               Thêm sản phẩm
             </Button>
           </AddButton>
-          <AddForm open={open} handleClose={() => setOpen(false)} />
+          <AddForm open={open} onClose={() => setOpen(false)} />
           <Table columns={columns} dataSource={data} />
-          {selected && <EditForm product={selected} handleClose={() => setSelected()} />}
+          {selected && <EditForm product={selected} onClose={() => setSelected()} />}
         </Content>
       </Container>
     </AdminLayout>

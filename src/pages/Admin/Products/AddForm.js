@@ -5,7 +5,7 @@ import { getBrands } from '../../../store/reducers/brandsSlice'
 import { addProduct } from '../../../store/reducers/productsSlice'
 import { brandsSelector } from '../../../store/selectors'
 
-const AddForm = ({open, handleClose}) => {
+const AddForm = ({open, onClose}) => {
     const brandsStore = useSelector(brandsSelector)
     const dispatch = useDispatch()
 
@@ -26,7 +26,7 @@ const AddForm = ({open, handleClose}) => {
                     in_stock: Number(values.in_stock)
                 }
                 dispatch(addProduct(newProduct))
-                handleClose()
+                onClose()
             })
             .catch(info => {
                 console.log("Validate Failed: ", info)
@@ -39,7 +39,7 @@ const AddForm = ({open, handleClose}) => {
             open={open}
             okText="Thêm mới"
             cancelText="Hủy"
-            onCancel={handleClose}
+            onCancel={onClose}
             onOk={handleAdd}
         >
             <Form

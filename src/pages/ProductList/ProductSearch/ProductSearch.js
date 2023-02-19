@@ -20,11 +20,13 @@ const ProductSearch = () => {
     }, [params])
 
     useEffect(() => {
-        dispatch(getSearchProducts({
-            page: page,
-            perPage: 12,
-            keyword: params.keyword
-        }))
+        if (params.keyword) {
+            dispatch(getSearchProducts({
+                page: page,
+                perPage: 12,
+                keyword: params.keyword.replaceAll("-", " ")
+            }))
+        }
     }, [dispatch, params, page])
 
     return (

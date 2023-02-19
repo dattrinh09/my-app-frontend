@@ -84,7 +84,7 @@ const Order = () => {
                     <Result
                         status="error"
                         icon={<ShoppingCartOutlined />}
-                        title="Lịch sử mua hàng không có đơn hàng nào!"
+                        title={localStorage.getItem("user_id") ? "Không có đơn hàng nào!" : "Bạn chưa đăng nhập!"}
                         extra={
                             <Link to={ConstanthPaths.HOME_PAGE}>
                                 <Button type="primary" danger size="large" >Trở về trang chủ</Button>
