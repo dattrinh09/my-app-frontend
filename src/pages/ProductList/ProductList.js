@@ -1,4 +1,4 @@
-import { List, Card, Radio, Button } from 'antd'
+import { List, Card, Radio, Button, Spin } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -9,7 +9,7 @@ import { getFilterProducts } from '../../store/reducers/productsSlice'
 import { brandsSelector, productsSelector } from '../../store/selectors'
 import { getProducRoute, getProductByBrandAndPriceRoute, getProductByBrandRoute, getProductByPriceRoute } from '../../ultis/route'
 import { formatPrice } from '../../ultis/ulti'
-import { Container, Content, Heading, Pagin, Price, Sec, Section, SideBar, SideBarItem, Title } from './product-list-styles'
+import { Container, Content, Heading, Loader, Pagin, Price, Sec, Section, SideBar, SideBarItem, Title } from './product-list-styles'
 
 const ProductList = () => {
   const params = useParams()
@@ -17,6 +17,7 @@ const ProductList = () => {
   const navigate = useNavigate()
 
   const { filterProducts, total } = useSelector(productsSelector)
+  const [isLoading, setIsLoading] = useState(true)
   const [page, setPage] = useState(1)
   const { brands } = useSelector(brandsSelector)
   const dispath = useDispatch()
@@ -26,6 +27,7 @@ const ProductList = () => {
 
   useEffect(() => {
     setPage(1)
+    setIsLoading(true)
     if (params.brand_name) setBrand(params.brand_name)
     else setBrand("ALL")
     if (params.price) setPrice(params.price)
@@ -41,6 +43,7 @@ const ProductList = () => {
       brandName: brand,
       price: price
     }))
+    setIsLoading(false)
   }, [dispath, page, brand, price])
 
   const handleChangeBrand = e => {
@@ -110,26 +113,32 @@ const ProductList = () => {
           <Section>
             <Heading><h2>Điện thoại: {total} sản phẩm</h2></Heading>
             <Sec>
-              <List
-                grid={{ column: 3 }}
-                dataSource={filterProducts}
-                renderItem={item => (
-                  <List.Item>
-                    <Link key={item.id} to={getProducRoute(item.product_name)}>
-                      <Card
-                        hoverable
-                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
-                        cover={<img alt='phone' src={item.url} style={{ height: '120px', paddingTop: '20px' }} />}
-                      >
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <Title>{item.product_name}</Title>
-                          <Price>{formatPrice(item.price)}</Price>
-                        </div>
-                      </Card>
-                    </Link>
-                  </List.Item>
-                )}
-              />
+              {isLoading ? (
+                <Loader>
+                  <Spin size="large" />
+                </Loader>
+              ) : (
+                <List
+                  grid={{ column: 3 }}
+                  dataSource={filterProducts}
+                  renderItem={item => (
+                    <List.Item>
+                      <Link key={item.id} to={getProducRoute(item.product_name)}>
+                        <Card
+                          hoverable
+                          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', height: '300px' }}
+                          cover={<img alt='phone' src={item.url} style={{ height: '120px', paddingTop: '20px' }} />}
+                        >
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <Title>{item.product_name}</Title>
+                            <Price>{formatPrice(item.price)}</Price>
+                          </div>
+                        </Card>
+                      </Link>
+                    </List.Item>
+                  )}
+                />
+              )}
               <Pagin>
                 {filterProducts.length < total && <Button size="large" onClick={() => setPage(page + 1)}>Xem thêm</Button>}
               </Pagin>

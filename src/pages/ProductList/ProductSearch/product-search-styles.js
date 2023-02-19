@@ -13,6 +13,13 @@ export const Section = styled.div`
     gap: 20px;
 `
 
+export const Loader = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+`
+
 export const Sec = styled.div`
     display: flex;
     flex-direction: column;

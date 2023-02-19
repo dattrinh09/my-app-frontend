@@ -34,10 +34,10 @@ const brandsSlice = createSlice({
             })
             .addCase(addBrand.fulfilled, (state, action) => {
                 state.brands.push(action.payload)
-                showNotification("success", "Thêm mới thành công!")
+                showNotification("success", "Thêm mới thành công!", "Hãng sản xuất đã được thêm vào cơ sở dữ liệu.")
             })
             .addCase(addBrand.rejected, () => {
-                showNotification("error", "Thêm mới không thành công!")
+                showNotification("error", "Thêm mới không thành công!", "Hãng sản xuất chưa được thêm vào cơ sở dữ liệu.")
             })
             .addCase(updateBrand.fulfilled, (state, action) => {
                 state.brands = state.brands.map(item => {
@@ -46,17 +46,17 @@ const brandsSlice = createSlice({
                     }
                     return item
                 })
-                showNotification("success", "Cập nhật thành công!")
+                showNotification("success", "Cập nhật thành công!", "Hãng sản xuất đã được cập nhật vào cơ sở dữ liệu.")
             })
             .addCase(updateBrand.rejected, () => {
-                showNotification("error", "Cập nhật không thành công!")
+                showNotification("error", "Cập nhật không thành công!", "Hãng sản xuất chưa được cập nhật vào cơ sở dữ liệu.")
             })
             .addCase(deleteBrand.fulfilled, (state, action) => {
                 state.brands = state.brands.filter(item => item.id !== action.payload)
-                showNotification("success", "Xóa thành công!")
+                showNotification("success", "Xóa thành công!", "Hãng sản xuất đã được xóa khỏi cơ sở dữ liệu.")
             })
             .addCase(deleteBrand.rejected, () => {
-                showNotification("error", "Xóa không thành công!")
+                showNotification("error", "Xóa không thành công!", "Hãng sản xuất chưa được xóa khỏi cơ sở dữ liệu.")
             })
     }
 })

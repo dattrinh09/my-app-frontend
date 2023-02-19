@@ -3,7 +3,7 @@ import { Button, Modal, Space, Table } from 'antd'
 import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AdminLayout from '../../../components/layout/AdminLayout'
-import { getUsers } from '../../../store/reducers/usersSlice'
+import { deleteUser, getUsers } from '../../../store/reducers/usersSlice'
 import { usersSelector } from '../../../store/selectors'
 import { Container, Content } from './users-styles'
 
@@ -24,7 +24,7 @@ const Users = () => {
             okText: "Đồng ý",
             cancelText: "Hủy",
             onOk() {
-                console.log(id)
+                dispatch(deleteUser(id))
             }
         })
     }

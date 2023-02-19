@@ -9,7 +9,6 @@ export const getOrders = createAsyncThunk('orders/getOrders', async () => {
 
 export const getUserOrders = createAsyncThunk('orders/getUserOrders', async userId => {
     const res = await axiosInstance.get(`api/order/user/${userId}`)
-
     return res.data
 }) 
 
@@ -46,9 +45,8 @@ const ordersSlice = createSlice({
                 state.userOrders.push(action.payload)
                 showNotification("success", "Mua thành công!", "Đơn hàng đang được xác nhận.")
             })
-            .addCase(deleteOrder.fulfilled, (state, action) => {
-                state.orders = state.orders.filter(item => item.id !== action.payload)
-                showNotification("success", "Xoá thành công!", "Đơn hàng đã được xóa khỏi cơ sở dữ liệu.")
+            .addCase(createOrder.rejected, () => {
+                showNotification("error", "Mua hàng không thành công!", "Sản phẩm đã hết hàng hoặc không còn tồn tại.")
             })
             .addCase(updateOrder.fulfilled, (state, action) => {
                 state.orders = state.orders.map(item => {
@@ -58,6 +56,13 @@ const ordersSlice = createSlice({
                     return item
                 })
                 showNotification("success", "Cập nhật thành công!", "Đơn hàng đã được cập nhật vào cơ sở dữ liệu.")
+            })
+            .addCase(updateOrder.rejected, () => {
+                showNotification("error", "Xóa không thành công!", "Đơn hàng chưa được cập nhật vào cơ sở dữ liệu.")
+            })
+            .addCase(deleteOrder.fulfilled, (state, action) => {
+                state.orders = state.orders.filter(item => item.id !== action.payload)
+                showNotification("success", "Xoá thành công!", "Đơn hàng đã được xóa khỏi cơ sở dữ liệu.")
             })
             .addCase(deleteOrder.rejected, () => {
                 showNotification("error", "Xóa không thành công!", "Đơn hàng chưa được xóa khỏi cơ sở dữ liệu.")

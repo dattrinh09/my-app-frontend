@@ -14,7 +14,13 @@ export const SideBar = styled.div`
     flex-direction: column;
     gap: 20px;
 `
-export const SideBarItem = styled.div`
+export const SideBarItem = styled.div``
+
+export const Loader = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
 `
 
 export const Section = styled.div`

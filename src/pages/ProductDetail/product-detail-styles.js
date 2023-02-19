@@ -99,7 +99,7 @@ export const SubSection = styled.div`
     padding: 20px;
     gap: 20px;
 `
-export const Heading1 = styled.h2`
+export const Heading1 = styled.h3`
     padding: 0;
     margin: 0;
 `

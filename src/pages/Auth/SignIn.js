@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ConstanthPaths } from '../../constants/constants'
 import axiosInstance from '../../requests/axiosInstance'
-import { FormContainer, FormHeading } from './form-styles'
+import { FormContainer, FormHeading, FormLayout } from './form-styles'
 
 const SignIn = () => {
   const [error, setError] = useState("")
@@ -35,59 +35,61 @@ const SignIn = () => {
   }
 
   return (
-    <FormContainer>
-      <FormHeading>Đăng nhập</FormHeading>
-      <Form
-        name="normal_login"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={handleFinish}
-        onFocus={() => setError("")}
-      >
-        <Form.Item
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: 'Hãy điền e-mail của bạn!',
-            },
-          ]}
+    <FormLayout>
+      <FormContainer>
+        <FormHeading>Đăng nhập</FormHeading>
+        <Form
+          name="normal_login"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={handleFinish}
+          onFocus={() => setError("")}
         >
-          <Input
-            prefix={<MailOutlined />}
-            type="email"
-            placeholder="E-Mail"
-          />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: 'Hãy điền mật khẩu của bạn!',
-            },
-          ]}
-        >
-          <Input
-            prefix={<LockOutlined />}
-            type="password"
-            placeholder="Mật khẩu"
-          />
-        </Form.Item>
-        {error && <span style={{ color: 'red' }}>{error}</span>}
-        <Form.Item>Nếu bạn chưa có tài khoản. Nhấn vào <Link to={ConstanthPaths.SIGN_UP}>đây.</Link></Form.Item>
-        <Form.Item>
-          <Button
-            type='primary'
-            htmlType="submit"
-            style={{ width: "100px" }}
+          <Form.Item
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy điền e-mail của bạn!',
+              },
+            ]}
           >
-            Đăng nhập
-          </Button>
-        </Form.Item>
-      </Form>
-    </FormContainer>
+            <Input
+              prefix={<MailOutlined />}
+              type="email"
+              placeholder="E-Mail"
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy điền mật khẩu của bạn!',
+              },
+            ]}
+          >
+            <Input
+              prefix={<LockOutlined />}
+              type="password"
+              placeholder="Mật khẩu"
+            />
+          </Form.Item>
+          {error && <span style={{ color: 'red' }}>{error}</span>}
+          <Form.Item>Nếu bạn chưa có tài khoản. Nhấn vào <Link to={ConstanthPaths.SIGN_UP}>đây.</Link></Form.Item>
+          <Form.Item>
+            <Button
+              type='primary'
+              htmlType="submit"
+              style={{ width: "100px" }}
+            >
+              Đăng nhập
+            </Button>
+          </Form.Item>
+        </Form>
+      </FormContainer>
+    </FormLayout>
   )
 }
 
