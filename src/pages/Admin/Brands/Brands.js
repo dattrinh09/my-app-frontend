@@ -1,6 +1,7 @@
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { Button, Form, Input, Modal, Space, Table } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AdminLayout from '../../../components/layout/AdminLayout'
 import { addBrand, deleteBrand, getBrands, updateBrand } from '../../../store/reducers/brandsSlice'
@@ -18,11 +19,13 @@ const Brands = () => {
         dispatch(getBrands())
     }, [dispatch])
 
-    const data = brands.map(value => ({
-        key: value.id,
-        id: value.id,
-        brand_name: value.brand_name
-    }))
+    const data = useMemo(() => {
+        return brands.map(value => ({
+            key: value.id,
+            id: value.id,
+            brand_name: value.brand_name
+        }))
+    }, [brands])
 
     // Thêm mới
     const [open, setOpen] = useState(false)
@@ -68,7 +71,8 @@ const Brands = () => {
     // Xóa
     const handleDelete = (id) => {
         confirm({
-            content: "Bạn muốn xóa hãng sản xuất này khỏi cơ sở dữ liệu? Bạn sẽ xóa luôn những sản phẩm thuộc hãng này!",
+            title: "Bạn muốn xóa hãng sản xuất này?",
+            content: "Bạn sẽ xóa luôn những sản phẩm thuộc hãng này!",
             okText: "Đồng ý",
             cancelText: "Hủy",
             onOk() {

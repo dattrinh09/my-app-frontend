@@ -12,6 +12,7 @@ import Brands from '../pages/Admin/Brands/Brands'
 import ProductSearch from '../pages/ProductList/ProductSearch/ProductSearch'
 import Order from '../pages/Order/Order'
 import Orders from '../pages/Admin/Orders/Orders'
+import Users from '../pages/Admin/Users/Users'
 
 const MyRoutes = () => {
   return (
@@ -30,6 +31,7 @@ const MyRoutes = () => {
       <Route element={<PrivateRoute />}>
         <Route path={ConstanthPaths.ADMIN_PRODUCT} element={<Products />} />
         <Route path={ConstanthPaths.ADMIN_BRAND} element={<Brands />} />
+        <Route path={ConstanthPaths.ADMIN_USER} element={<Users />} />
         <Route path={ConstanthPaths.ADMIN_ORDER} element={<Orders />} />
       </Route>
     </Routes>

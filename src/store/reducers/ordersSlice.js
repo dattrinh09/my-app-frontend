@@ -2,8 +2,19 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../requests/axiosInstance";
 import { showNotification } from "../../ultis/notification";
 
-export const getAllOrders = createAsyncThunk('orders/getAllOrders', async () => {
+export const getOrders = createAsyncThunk('orders/getOrders', async () => {
     const res = await axiosInstance.get('api/order')
+    return res.data
+})
+
+export const getUserOrders = createAsyncThunk('orders/getUserOrders', async userId => {
+    const res = await axiosInstance.get(`api/order/user/${userId}`)
+
+    return res.data
+}) 
+
+export const createOrder = createAsyncThunk('orders/createOrder', async newOrder => {
+    const res = await axiosInstance.post("api/order", newOrder)
     return res.data
 })
 
@@ -25,12 +36,19 @@ const ordersSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getAllOrders.fulfilled, (state, action) => {
+            .addCase(getOrders.fulfilled, (state, action) => {
                 state.orders = action.payload
+            })
+            .addCase(getUserOrders.fulfilled, (state, action) => {
+                state.userOrders = action.payload
+            })
+            .addCase(createOrder.fulfilled, (state, action) => {
+                state.userOrders.push(action.payload)
+                showNotification("success", "Mua thành công!", "Đơn hàng đang được xác nhận.")
             })
             .addCase(deleteOrder.fulfilled, (state, action) => {
                 state.orders = state.orders.filter(item => item.id !== action.payload)
-                showNotification("success", "Xoá thành công!")
+                showNotification("success", "Xoá thành công!", "Đơn hàng đã được xóa khỏi cơ sở dữ liệu.")
             })
             .addCase(updateOrder.fulfilled, (state, action) => {
                 state.orders = state.orders.map(item => {
@@ -39,10 +57,10 @@ const ordersSlice = createSlice({
                     }
                     return item
                 })
-                showNotification("success", "Cập nhật thành công!")
+                showNotification("success", "Cập nhật thành công!", "Đơn hàng đã được cập nhật vào cơ sở dữ liệu.")
             })
             .addCase(deleteOrder.rejected, () => {
-                showNotification("error", "Xóa không thành công!")
+                showNotification("error", "Xóa không thành công!", "Đơn hàng chưa được xóa khỏi cơ sở dữ liệu.")
             })
     }
 })

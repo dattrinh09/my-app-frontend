@@ -7,6 +7,11 @@ export const getProducts = createAsyncThunk('products/getProducts', async () => 
     return res.data.products
 })
 
+export const getProductByName = createAsyncThunk('products/getProductByName', async productName => {
+    const res = await axiosInstance.get(`api/product/name/${productName}`)
+    return res.data
+})
+
 export const getFilterProducts = createAsyncThunk('products/getFilterProducts', async filters => {
     const params = {
         page: filters.page,
@@ -63,6 +68,7 @@ const productsSlice = createSlice({
     name: "products",
     initialState: {
         products: [],
+        selectedProduct: null,
         filterProducts: [],
         total: 0,
     },
@@ -70,6 +76,9 @@ const productsSlice = createSlice({
         builder
             .addCase(getProducts.fulfilled, (state, action) => {
                 state.products = action.payload
+            })
+            .addCase(getProductByName.fulfilled, (state, action) => {
+                state.selectedProduct = action.payload
             })
             .addCase(getFilterProducts.fulfilled, (state, action) => {
                 state.filterProducts = action.payload.page === 1
@@ -85,10 +94,10 @@ const productsSlice = createSlice({
             })
             .addCase(addProduct.fulfilled, (state, action) => {
                 state.products.push(action.payload)
-                showNotification("success", "Thêm mới thành công!")
+                showNotification("success", "Thêm mới thành công!", "Sản phẩm đã được thêm vào cơ sở dữ liệu.")
             })
             .addCase(addProduct.rejected, () => {
-                showNotification("error", "Thêm mới không thành công!")
+                showNotification("error", "Thêm mới không thành công!", "Sản phẩm chưa được thêm vào cơ sở dữ liệu.")
             })
             .addCase(updateProduct.fulfilled, (state, action) => {
                 state.products = state.products.map(item => {
@@ -97,17 +106,17 @@ const productsSlice = createSlice({
                     }
                     return item
                 })
-                showNotification("success", "Cập nhật thành công!")
+                showNotification("success", "Cập nhật thành công!", "Sản phẩm đã được cập nhật vào cơ sở dữ liệu.")
             })
             .addCase(updateProduct.rejected, () => {
-                showNotification("error", "Cập nhật không thành công!")
+                showNotification("error", "Cập nhật không thành công!", "Sản phẩm chưa được cập nhật vào cơ sở dữ liệu.")
             })
             .addCase(deleteProduct.fulfilled, (state, action) => {
                 state.products = state.products.filter(item => item.id !== action.payload)
-                showNotification("success", "Xóa thành công!")
+                showNotification("success", "Xóa thành công!", "Sản phẩm đã được xóa khỏi cơ sở dữ liệu.")
             })
             .addCase(deleteProduct.rejected, () => {
-                showNotification("error", "Xóa không thành công!")
+                showNotification("error", "Xóa không thành công!", "Sản phẩm chưa được xáo khỏi cơ sở dữ liệu.")
             })
     }
 })
