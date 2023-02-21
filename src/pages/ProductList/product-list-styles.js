@@ -16,13 +16,6 @@ export const SideBar = styled.div`
 `
 export const SideBarItem = styled.div``
 
-export const Loader = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 100px;
-`
-
 export const Section = styled.div`
     flex: 3;
     display: flex;

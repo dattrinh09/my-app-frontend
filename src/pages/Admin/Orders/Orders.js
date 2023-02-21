@@ -3,6 +3,7 @@ import { Button, Form, Modal, Radio, Select, Space, Table, Tag } from 'antd'
 import React, { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AdminLayout from '../../../components/layout/AdminLayout'
+import Loader from '../../../components/Loader/Loader'
 import { OrderStatus } from '../../../constants/constants'
 import { deleteOrder, getOrders, updateOrder } from '../../../store/reducers/ordersSlice'
 import { ordersSelector } from '../../../store/selectors'
@@ -12,6 +13,7 @@ import { Container, Content, Control, ProductImg } from './orders-styles'
 const { confirm } = Modal
 
 const Orders = () => {
+  const [isLoading, setIsLoading] = useState(true)
   const { orders } = useSelector(ordersSelector)
   const dispatch = useDispatch()
   const [selected, setSelected] = useState()
@@ -20,6 +22,7 @@ const Orders = () => {
 
   useEffect(() => {
     dispatch(getOrders())
+    setIsLoading(false)
   }, [dispatch])
 
   const data = useMemo(() => {
@@ -151,7 +154,7 @@ const Orders = () => {
               ))}
             </Radio.Group>
           </Control>
-          <Table columns={columns} dataSource={data} />
+          {isLoading ? <Loader /> : <Table columns={columns} dataSource={data} />}
           <Modal
             title="Cập nhật trạng thái đơn hàng"
             open={!!selected}

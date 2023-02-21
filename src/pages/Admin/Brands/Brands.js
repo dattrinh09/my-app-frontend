@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AdminLayout from '../../../components/layout/AdminLayout'
+import Loader from '../../../components/Loader/Loader'
 import { addBrand, deleteBrand, getBrands, updateBrand } from '../../../store/reducers/brandsSlice'
 import { brandsSelector } from '../../../store/selectors'
 import { AddButton, Container, Content } from './brands-styles'
@@ -12,11 +13,13 @@ const { confirm } = Modal
 
 const Brands = () => {
     // Lấy dữ liệu
+    const [isLoading, setIsLoading] = useState(true) 
     const { brands } = useSelector(brandsSelector)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getBrands())
+        setIsLoading(false)
     }, [dispatch])
 
     const data = useMemo(() => {
@@ -147,7 +150,7 @@ const Brands = () => {
                             </Form.Item>
                         </Form>
                     </Modal>
-                    <Table columns={columns} dataSource={data} tableLayout="fixed" />
+                    {isLoading ? <Loader /> : <Table columns={columns} dataSource={data} tableLayout="fixed" />}
                     <Modal
                         title="Chỉnh sửa thông tin hãng sản xuất"
                         open={!!selected}

@@ -52,6 +52,10 @@ export const Price = styled.div`
 
 export const Status = styled.div`
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 `
 
 export const StatusTag = styled.div`
@@ -59,8 +63,7 @@ export const StatusTag = styled.div`
     color: ${props => props.color};
     font-weight: 500;
     border: 1px solid ${props => props.color};
-    width: 120px;
-    margin: 0 auto;
+    width: 128px;
     padding: 5px;
     border-radius: 5px;
 `

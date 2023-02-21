@@ -1,31 +1,17 @@
-import { Button, Card, Form, Input, List, Modal, Pagination, Rate, Spin } from 'antd';
+import { Card, Form, Input, List, Modal } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import MainLayout from '../../components/layout/MainLayout';
+import Loader from '../../components/Loader/Loader';
 import { createOrder } from '../../store/reducers/ordersSlice';
 import { getProductByName, getProducts } from '../../store/reducers/productsSlice';
 import { productsSelector } from '../../store/selectors';
 import { showNotification } from '../../ultis/notification';
 import { getProducRoute, getProductByBrandRoute } from '../../ultis/route';
 import { formatPrice } from '../../ultis/ulti';
-import { Brand, ButtonContent, BuyButton, Com, Container, Content, Heading, Heading1, Info, Loader, Pagin, Photo, PhotoContainer, Price, Price1, Section, SubContent, SubHeading, SubSection } from './product-detail-styles'
-
-const comments = []
-
-for (var j = 0; j < 100; j++) {
-    const cmt = {
-        id: `${j + 1}`,
-        user: {
-            id: `u-${j + 1}`,
-            name: `user-${j + 1}`
-        },
-        content: "abcdefghijklmno",
-        rate: 2.5
-    }
-    comments.push(cmt)
-}
+import { Brand, ButtonContent, BuyButton, Container, Content, Heading, Heading1, Info, Photo, PhotoContainer, Price, Price1, Section, SubContent, SubHeading, SubSection } from './product-detail-styles'
 
 const ProductDetail = () => {
     const params = useParams()
@@ -49,17 +35,7 @@ const ProductDetail = () => {
 
     // Đặt hàng
     const [form] = Form.useForm()
-    const [page, setPage] = useState(1)
     const [open, setOpen] = useState(false)
-
-    const listComments = useMemo(() => {
-        const num = (page - 1) * 10
-        return comments.slice(num, num + 10)
-    }, [page])
-
-    const handleSubmitComment = values => {
-        console.log("comment", values)
-    }
 
     const handleOrder = () => {
         if (localStorage.getItem("token")) {
@@ -93,9 +69,7 @@ const ProductDetail = () => {
             <Container>
                 {!selectedProduct ?
                     (
-                        <Loader>
-                            <Spin size="large" />
-                        </Loader>
+                        <Loader />
                     ) : (
                         <Content>
                             <Section>
@@ -176,84 +150,6 @@ const ProductDetail = () => {
                                         </List.Item>
                                     )}
                                 />
-                            </SubSection>
-                            <SubSection>
-                                <Heading1>Đánh giá sản phẩm</Heading1>
-                                {localStorage.getItem('token') &&
-                                    <Com>
-                                        <Form
-                                            name="comment"
-                                            layout="vertical"
-                                            initialValues={{
-                                                remember: true,
-                                            }}
-                                            onFinish={handleSubmitComment}
-                                        >
-                                            <Form.Item
-                                                name="content"
-                                                label="Bình luận"
-                                                rules={[
-                                                    {
-                                                        required: true,
-                                                        message: 'Hãy nhập bình luận của bạn!',
-                                                    },
-                                                ]}
-                                            >
-                                                <Input.TextArea
-                                                    allowClear
-                                                    showCount
-                                                    maxLength={1000}
-                                                    placeholder="Bình luận ..."
-                                                    autoSize={{ minRows: 2 }}
-                                                />
-                                            </Form.Item>
-                                            <Form.Item
-                                                name="rate"
-                                                label="Đánh giá"
-                                                rules={[
-                                                    {
-                                                        required: true,
-                                                        message: 'Hãy nhập đánh giá của bạn!',
-                                                    },
-                                                ]}
-                                            >
-                                                <Rate allowHalf />
-                                            </Form.Item>
-                                            <div>
-                                                <Button
-                                                    type='primary'
-                                                    htmlType="submit"
-                                                    style={{ marginTop: "20px" }}
-                                                >
-                                                    Nhập bình luận
-                                                </Button>
-                                            </div>
-                                        </Form>
-                                    </Com>
-                                }
-                                <List
-                                    itemLayout="horizontal"
-                                    dataSource={listComments}
-                                    size="large"
-                                    renderItem={item => (
-                                        <List.Item key={item.id}>
-                                            <List.Item.Meta
-                                                title={item.user.name}
-                                                description={item.content}
-                                            />
-                                            <Rate allowHalf value={item.rate} />
-                                        </List.Item>
-                                    )}>
-                                </List>
-                                <Pagin>
-                                    <Pagination
-                                        total={comments.length}
-                                        pageSize={10}
-                                        defaultCurrent={page}
-                                        showSizeChanger={false}
-                                        onChange={p => setPage(p)}
-                                    />
-                                </Pagin>
                             </SubSection>
                         </Content>
                     )}

@@ -1,15 +1,16 @@
-import { List, Card, Radio, Button, Spin } from 'antd'
+import { List, Card, Radio, Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import MainLayout from '../../components/layout/MainLayout'
+import Loader from '../../components/Loader/Loader'
 import { ConstanthPaths, FilterPrice } from '../../constants/constants'
 import { getBrands } from '../../store/reducers/brandsSlice'
 import { getFilterProducts } from '../../store/reducers/productsSlice'
 import { brandsSelector, productsSelector } from '../../store/selectors'
 import { getProducRoute, getProductByBrandAndPriceRoute, getProductByBrandRoute, getProductByPriceRoute } from '../../ultis/route'
 import { formatPrice } from '../../ultis/ulti'
-import { Container, Content, Heading, Loader, Pagin, Price, Sec, Section, SideBar, SideBarItem, Title } from './product-list-styles'
+import { Container, Content, Heading, Pagin, Price, Sec, Section, SideBar, SideBarItem, Title } from './product-list-styles'
 
 const ProductList = () => {
   const params = useParams()
@@ -114,9 +115,7 @@ const ProductList = () => {
             <Heading><h2>Điện thoại: {total} sản phẩm</h2></Heading>
             <Sec>
               {isLoading ? (
-                <Loader>
-                  <Spin size="large" />
-                </Loader>
+                <Loader />
               ) : (
                 <List
                   grid={{ column: 3 }}

@@ -10,16 +10,19 @@ import { deleteProduct, getProducts } from '../../../store/reducers/productsSlic
 import { formatPrice } from '../../../ultis/ulti'
 import AdminLayout from '../../../components/layout/AdminLayout'
 import { useMemo } from 'react'
+import Loader from '../../../components/Loader/Loader'
 
 const { confirm } = Modal
 
 const Products = () => {
   // Lấy danh sách sản phẩm
+  const [isLoading, setIsLoading] = useState(true)
   const { products } = useSelector(productsSelector)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(getProducts())
+    setIsLoading(false)
   }, [dispatch])
 
   const data = useMemo(() => {
@@ -179,7 +182,7 @@ const Products = () => {
             </Button>
           </AddButton>
           <AddForm open={open} onClose={() => setOpen(false)} />
-          <Table columns={columns} dataSource={data} />
+          {isLoading ? <Loader /> : <Table columns={columns} dataSource={data} />}
           {selected && <EditForm product={selected} onClose={() => setSelected()} />}
         </Content>
       </Container>

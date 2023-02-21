@@ -1,13 +1,14 @@
-import { Button, Card, List, Spin } from 'antd'
+import { Button, Card, List } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import MainLayout from '../../../components/layout/MainLayout'
+import Loader from '../../../components/Loader/Loader'
 import { getSearchProducts } from '../../../store/reducers/productsSlice'
 import { productsSelector } from '../../../store/selectors'
 import { getProducRoute } from '../../../ultis/route'
 import { formatPrice } from '../../../ultis/ulti'
-import { Container, Loader, Price, Sec, Section, SubSec, Title } from './product-search-styles'
+import { Container, Price, Sec, Section, SubSec, Title } from './product-search-styles'
 
 const ProductSearch = () => {
     const params = useParams()
@@ -36,9 +37,7 @@ const ProductSearch = () => {
         <MainLayout>
             <Container>
                 {isLoading ? (
-                    <Loader>
-                        <Spin size="large" />
-                    </Loader>
+                    <Loader />
                 ) : (
                     <Section>
                         <h2>Có {total} kết quả tìm kiếm cho từ khóa: "{params.keyword}"</h2>

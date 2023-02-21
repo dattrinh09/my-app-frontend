@@ -4,12 +4,6 @@ export const Container = styled.div`
     width: 1200px;
     margin: 0 auto;
 `
-export const Loader = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 100px;
-`
 
 export const Content = styled.div`
     padding: 50px 0;

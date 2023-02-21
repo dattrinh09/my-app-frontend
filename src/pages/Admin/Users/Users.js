@@ -1,8 +1,9 @@
 import { DeleteOutlined } from '@ant-design/icons'
 import { Button, Modal, Space, Table } from 'antd'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AdminLayout from '../../../components/layout/AdminLayout'
+import Loader from '../../../components/Loader/Loader'
 import { deleteUser, getUsers } from '../../../store/reducers/usersSlice'
 import { usersSelector } from '../../../store/selectors'
 import { Container, Content } from './users-styles'
@@ -10,11 +11,13 @@ import { Container, Content } from './users-styles'
 const { confirm } = Modal
 
 const Users = () => {
+    const [isLoading, setIsLoading] = useState(true)
     const { users } = useSelector(usersSelector)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getUsers())
+        setIsLoading(false)
     }, [dispatch])
 
     const handleDelete = id => {
@@ -76,7 +79,7 @@ const Users = () => {
             <Container>
                 <Content>
                     <h2>Người dùng</h2>
-                    <Table columns={columns} dataSource={data} />
+                    {isLoading ? <Loader /> : <Table columns={columns} dataSource={data} />}
                 </Content>
             </Container>
         </AdminLayout>

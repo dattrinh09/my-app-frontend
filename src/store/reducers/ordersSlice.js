@@ -22,6 +22,11 @@ export const updateOrder = createAsyncThunk('orders/updateOrder', async order =>
     return res.data
 })
 
+export const cancelOrder = createAsyncThunk('orders/cancelOrder', async order => {
+    const res = await axiosInstance.patch(`api/order/${order.id}`, order.data)
+    return res.data
+})
+
 export const deleteOrder = createAsyncThunk('orders/deleteOrder', async id => {
     await axiosInstance.delete(`api/order/${id}`)
     return id
@@ -56,6 +61,21 @@ const ordersSlice = createSlice({
                     return item
                 })
                 showNotification("success", "Cập nhật thành công!", "Đơn hàng đã được cập nhật vào cơ sở dữ liệu.")
+            })
+            .addCase(cancelOrder.fulfilled, (state, action) => {
+                state.orders = state.orders.map(item => {
+                    if (item.id === action.payload.id) {
+                        item = action.payload
+                    }
+                    return item
+                })
+                state.userOrders = state.userOrders.map(item => {
+                    if (item.id === action.payload.id) {
+                        item = action.payload
+                    }
+                    return item
+                })
+                showNotification("success", "Hủy thành công!", "Đơn hàng của bạn đã được hủy.")
             })
             .addCase(updateOrder.rejected, () => {
                 showNotification("error", "Xóa không thành công!", "Đơn hàng chưa được cập nhật vào cơ sở dữ liệu.")
