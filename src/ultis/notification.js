@@ -6,6 +6,6 @@ export function showNotification(type, message, description) {
         description: description,
         type: type,
         placement: "top",
-        duration: 10
+        duration: 5
     })
 }
